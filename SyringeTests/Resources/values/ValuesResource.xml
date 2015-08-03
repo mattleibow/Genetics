@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- test resources -->
+    <bool name="BooleanResource">true</bool>
+    <color name="ColorResource">#ff0000</color>
+    <dimen name="DimensionResource">25dp</dimen>
+    <integer name="IntegerResource">123</integer>
+    <string name="StringResource">This is a String resource.</string>
+    <integer-array name="IntegerArrayResource">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </integer-array>
+    <string-array name="StringArrayResource">
+        <item>StringArray-1</item>
+        <item>StringArray-2</item>
+        <item>StringArray-3</item>
+    </string-array>
+    <array name="TypedArrayResource">
+        <item>#FF0000</item>
+        <item>#00FF00</item>
+        <item>#0000FF</item>
+    </array>
+
+    <!-- app resources -->
+    <string name="ApplicationName">SyringeTests</string>
+</resources>

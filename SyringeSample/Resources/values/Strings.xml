@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="titleText">Syringe &amp; Needle</string>
+    <string name="subtitleText">Member injection for Android views and resources.</string>
+    <string name="authorText">.NET Development Addict</string>
+    <string name="sayHelloText">Say Hello</string>
+    <string-array name="listContents">
+      <item>the</item>
+      <item>quick</item>
+      <item>brown</item>
+      <item>fox</item>
+      <item>jumps</item>
+      <item>over</item>
+      <item>the</item>
+      <item>lazy</item>
+      <item>dog</item>
+    </string-array>
+</resources>
