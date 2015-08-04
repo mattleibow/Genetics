@@ -77,10 +77,10 @@ namespace SyringeTests
             };
             foreach (var pair in validTypes)
             {
-                var result = array.CreateEnumerable(pair.Key);
+                var result = pair.Key.CreateEnumerable(array);
                 Assert.AreEqual(pair.Value, result.GetType());
 
-                result = list.CreateEnumerable(pair.Key);
+                result = pair.Key.CreateEnumerable(list);
                 Assert.AreEqual(pair.Value, result.GetType());
             }
 
@@ -94,10 +94,10 @@ namespace SyringeTests
             };
             foreach (var type in invalidTypes)
             {
-                var result = array.CreateEnumerable(type);
+                var result = type.CreateEnumerable(array);
                 Assert.IsNull(result);
 
-                result = list.CreateEnumerable(type);
+                result = type.CreateEnumerable(list);
                 Assert.IsNull(result);
             }
         }

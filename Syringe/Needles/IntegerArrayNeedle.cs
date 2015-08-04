@@ -26,7 +26,7 @@ namespace Syringe.Needles
             var value = GetArrayValue(context.Resources, resourceId, memberMapping.MemberType);
             if (value != null)
             {
-                value = value.CreateEnumerable(memberMapping.MemberType);
+                value = memberMapping.MemberType.CreateEnumerable(value);
                 memberMapping.SetterMethod(target, value);
             }
             return value != null;

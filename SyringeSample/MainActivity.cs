@@ -18,7 +18,6 @@ namespace SyringeSample
 		[Inject(Resource.Id.hello)]  private Button hello;
 		[Inject(Resource.Id.listview)]  private ListView listview;
 		[Inject(Resource.Id.footer)]  private TextView footer;
-        [Inject(Resource.Id.title, Resource.Id.subtitle, Resource.Id.hello)] private List<View> headerViews;
 
         // resource injection fields
         [Inject(Resource.String.titleText)] private string titleText;
@@ -28,8 +27,9 @@ namespace SyringeSample
 
         // normal fields
         private SimpleAdapter adapter;
+        private List<View> headerViews;
 
-		public MainActivity()
+        public MainActivity()
         {
             Needle.Debug = true;
         }
@@ -40,14 +40,17 @@ namespace SyringeSample
 
             SetContentView(Resource.Layout.Main);
 
-			// inject the views into the fields
+            // inject the views into the fields
             Needle.Inject(this);
-            
+
             // Contrived code to use the bound fields.
             title.Text = titleText;
             subtitle.Text = subtitleText;
             footer.Text = "by " + authorText;
             hello.Text = sayHelloText;
+
+            headerViews.Add(title);
+            headerViews.Add(subtitle);
 
             adapter = new SimpleAdapter(this);
             listview.Adapter = adapter;

@@ -27,29 +27,8 @@ namespace Syringe.Mappings
                 var attr = member.GetCustomAttribute<InjectAttribute>(false);
                 if (attr != null)
                 {
-                    if (attr.ResourceIds == null && attr.ResourceIds.Length == 0)
-                    {
-                        // nothing to inject
-
-                        Needle.HandleError(
-                            "Nothing to inject for '{0}' on '{1}'.",
-                            member.Name,
-                            Type.FullName);
-                    }
-                    else if (attr.ResourceIds.Length > 1)
-                    {
-                        // multiple injection
-
-                        //var mapping = new MemberMapping(Type, member, attr);
-                        //Members.Add(member, mapping);
-                    }
-                    else
-                    {
-                        // single injection
-
                         var mapping = new MemberMapping(Type, member, attr);
                         Members.Add(member, mapping);
-                    }
                 }
             }
         }

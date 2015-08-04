@@ -71,22 +71,30 @@ namespace Syringe
             return null;
         }
 
-        public static IEnumerable CreateEnumerable(this IEnumerable collection, Type collectionType)
+        public static IEnumerable CreateEnumerable(this Type collectionType, IEnumerable collection)
         {
             IEnumerable enumerable = null;
 
             var elementType = collectionType.GetEnumerableElementType();
             if (elementType != null)
             {
-                var array = collection.GetType().IsArray
-                    ? (Array)collection
-                    : collection.Cast<object>().ToArray();
+                Array array = null;
+                if (collection != null)
+                {
+                    array = collection.GetType().IsArray
+                        ? (Array)collection
+                        : collection.Cast<object>().ToArray();
+                }
+                var arraySize = array == null ? 0 : array.Length;
 
                 if (collectionType.IsArray)
                 {
                     // handle arrays
-                    var newArray = Array.CreateInstance(elementType, array.Length);
-                    Array.Copy(array, newArray, array.Length);
+                    var newArray = Array.CreateInstance(elementType, arraySize);
+                    if (arraySize > 0)
+                    {
+                        Array.Copy(array, newArray, array.Length);
+                    }
                     enumerable = newArray;
                 }
                 else if (collectionType.IsClass &&
@@ -101,9 +109,12 @@ namespace Syringe
                     //   derives from IList
                     // so we can build this one
                     var instance = (IList)Activator.CreateInstance(collectionType);
-                    foreach (var item in array)
+                    if (arraySize > 0)
                     {
-                        instance.Add(item);
+                        foreach (var item in array)
+                        {
+                            instance.Add(item);
+                        }
                     }
                     enumerable = instance;
                 }
@@ -113,10 +124,13 @@ namespace Syringe
                     var listType = genericListType.MakeGenericType(elementType);
                     if (collectionType.IsAssignableFrom(listType))
                     {
-                        var instance = (IList)Activator.CreateInstance(listType, array.Length);
-                        foreach (var item in array)
+                        var instance = (IList)Activator.CreateInstance(listType, arraySize);
+                        if (arraySize > 0)
                         {
-                            instance.Add(item);
+                            foreach (var item in array)
+                            {
+                                instance.Add(item);
+                            }
                         }
                         enumerable = instance;
                     }

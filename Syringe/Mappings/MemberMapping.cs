@@ -14,17 +14,17 @@ namespace Syringe.Mappings
             MapMember();
         }
 
-        public Type Type { get; set; }
+        public virtual Type Type { get; protected set; }
 
-        public MemberInfo Member { get; set; }
+        public virtual MemberInfo Member { get; protected set; }
 
-        public InjectAttribute Attribute { get; set; }
+        public virtual InjectAttribute Attribute { get; protected set; }
 
-        public Type MemberType { get; set; }
+        public virtual Type MemberType { get; protected set; }
 
-        public Action<object, object> SetterMethod { get; set; }
+        public virtual Action<object, object> SetterMethod { get; protected set; }
 
-        public Func<object, object> GetterMethod { get; set; }
+        public virtual Func<object, object> GetterMethod { get; protected set; }
 
         private void MapMember()
         {

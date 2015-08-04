@@ -5,15 +5,15 @@ namespace Syringe
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
     public class InjectAttribute : Attribute
     {
-        public InjectAttribute(params int[] resourceIds)
+        public InjectAttribute(int resourceId)
         {
-            ResourceIds = resourceIds;
+            ResourceId = resourceId;
             Optional = false;
             Collection = null;
             //Type = ResourceType.Automatic;
         }
 
-        public int[] ResourceIds { get; private set; }
+        public int ResourceId { get; private set; }
 
         public bool Optional { get; set; }
 

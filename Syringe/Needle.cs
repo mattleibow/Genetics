@@ -94,25 +94,8 @@ namespace Syringe
                 {
                     var attr = memberMapping.Attribute;
                     var memberType = memberMapping.MemberType;
-
-                    var resourceId = attr.ResourceIds[0];
-                    var isMulti = attr.ResourceIds.Length > 1;
-
+                    var resourceId = attr.ResourceId;
                     // set the field value
-                    if (isMulti)
-                    {
-                        // try and inject a collection to the field
-                        var container = CreateCollection(memberType, attr.Collection);
-                        if (container == null)
-                        {
-                            HandleError(
-                                "Cannot inject a collection to '{0}' on '{1}'.",
-                                memberMapping.Member.Name,
-                                typeMapping.Type.FullName);
-                        }
-                    }
-                    else
-                    {
                         var resourceType = context.Resources.GetResourceTypeName(resourceId);
                         var needle = GetNeedle(resourceType, memberMapping);
                         var memberInjected = needle.Inject(target, source, resourceType, resourceId, context, memberMapping);
@@ -143,7 +126,6 @@ namespace Syringe
                                     memberMapping.Member.Name);
                             }
                         }
-                    }
                 }
             }
         }
