@@ -7,7 +7,7 @@ Syringe allows attributes to be used to describe how to inject resources, views 
  * Use `[InjectEvent]`,  or others like `[InjectClick]`, on methods instead of attaching delegates to events.
 
 ```csharp
-Using upublic class MyActivity : Activity
+public class MyActivity : Activity
 {
   [Inject(Resource.Id.username)]
   private EditText username;
