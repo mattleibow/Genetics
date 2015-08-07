@@ -1,6 +1,8 @@
 using System;
 using System.Reflection;
 
+using Syringe.Attributes;
+
 namespace Syringe.Mappings
 {
     public class MemberMapping

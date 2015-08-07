@@ -3,6 +3,7 @@ using Android.Views;
 using Android.Widget;
 
 using Syringe;
+using Syringe.Attributes;
 
 namespace SyringeSample
 {

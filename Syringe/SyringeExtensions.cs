@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Runtime.ExceptionServices;
 using Android.Runtime;
 using Java.Interop;
+using Android.Views;
+using Android.App;
 
 namespace Syringe
 {
@@ -138,6 +140,29 @@ namespace Syringe
             }
             
             return enumerable;
+        }
+
+        public static View FindViewById(object source, int resourceId)
+        {
+            var activity = source as Activity;
+            if (activity != null)
+            {
+                return activity.FindViewById(resourceId);
+            }
+
+            var view = source as View;
+            if (view != null)
+            {
+                return view.FindViewById(resourceId);
+            }
+
+            var dialog = source as Dialog;
+            if (dialog != null)
+            {
+                return dialog.FindViewById(resourceId);
+            }
+
+            return null;
         }
     }
 }

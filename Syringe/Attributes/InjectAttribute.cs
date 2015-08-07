@@ -1,6 +1,6 @@
 using System;
 
-namespace Syringe
+namespace Syringe.Attributes
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
     public class InjectAttribute : Attribute
@@ -10,7 +10,6 @@ namespace Syringe
             ResourceId = resourceId;
             Optional = false;
             Collection = null;
-            //Type = ResourceType.Automatic;
         }
 
         public int ResourceId { get; private set; }
@@ -19,29 +18,6 @@ namespace Syringe
 
         public Type Collection { get; set; }
 
-        //public ResourceType Type { get; set; }
-
         public bool DisposeOnWithdraw { get; set; }
     }
-
-    //  public enum ResourceType
-    //  {
-    //      Automatic,
-    //      View,
-    //
-    //      Animation,
-    //      Animator,
-    //      Boolean,
-    //      Bitmap,
-    //      Color,
-    //      ColorStateList,
-    //      Dimension,
-    //      Drawable,
-    //      Integer,
-    //      IntegerArray,
-    //      String,
-    //      StringArray,
-    //      TypedArray,
-    //      Xml
-    //  }
 }

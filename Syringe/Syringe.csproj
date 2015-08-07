@@ -41,14 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InjectEventAttribute.cs" />
+    <Compile Include="EventNeedles\IEventNeedle.cs" />
+    <Compile Include="EventNeedles\ViewEventNeedle.cs" />
+    <Compile Include="Attributes\InjectEventAttribute.cs" />
     <Compile Include="InjectionException.cs" />
+    <Compile Include="Mappings\MethodMapping.cs" />
     <Compile Include="Mappings\TypeMapping.cs" />
     <Compile Include="Mappings\MemberMapping.cs" />
     <Compile Include="Needles\IntegerArrayNeedle.cs" />
     <Compile Include="SyringeExtensions.cs" />
     <Compile Include="Needle.cs" />
-    <Compile Include="InjectAttribute.cs" />
+    <Compile Include="Attributes\InjectAttribute.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Needles\INeedle.cs" />
@@ -67,6 +70,7 @@
     <Compile Include="Needles\ViewNeedle.cs" />
     <Compile Include="Needles\TypedArrayNeedle.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -8,6 +8,7 @@ using Android.Graphics.Drawables;
 using Android.Views.Animations;
 
 using Syringe;
+using Syringe.Attributes;
 
 namespace SyringeTests.TestCases
 {

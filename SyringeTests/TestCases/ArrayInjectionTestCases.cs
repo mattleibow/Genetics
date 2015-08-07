@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Android.Content.Res;
 
 using Syringe;
+using Syringe.Attributes;
 
 namespace SyringeTests.TestCases
 {

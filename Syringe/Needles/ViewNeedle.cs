@@ -27,7 +27,7 @@ namespace Syringe.Needles
         public bool Inject(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
         {
             var assigned = false;
-            var value = FindViewById(source, resourceId);
+            var value = SyringeExtensions.FindViewById(source, resourceId);
             if (value != null)
             {
                 var valueType = value.GetType();
@@ -46,39 +46,18 @@ namespace Syringe.Needles
                     assigned = true;
                 }
             }
+            else
+            {
+                Needle.HandleError(
+                    "Unknown view container type '{0}'.",
+                    source.GetType().FullName);
+            }
             return assigned;
         }
 
         public void Withdraw(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
         {
             memberMapping.SetterMethod(target, null);
-        }
-
-        private View FindViewById(object source, int resourceId)
-        {
-            var activity = source as Activity;
-            if (activity != null)
-            {
-                return activity.FindViewById(resourceId);
-            }
-
-            var view = source as View;
-            if (view != null)
-            {
-                return view.FindViewById(resourceId);
-            }
-
-            var dialog = source as Dialog;
-            if (dialog != null)
-            {
-                return dialog.FindViewById(resourceId);
-            }
-
-            Needle.HandleError(
-                "Unknown view container type '{0}'.",
-                source.GetType().FullName);
-
-            return null;
         }
     }
 }

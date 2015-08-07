@@ -1,6 +1,7 @@
 using Android.Content;
 
 using Syringe;
+using Syringe.Attributes;
 
 namespace SyringeTests.TestCases
 {

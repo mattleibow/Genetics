@@ -49,8 +49,10 @@
     <Compile Include="ArrayResourceInjectionTests.cs" />
     <Compile Include="TestCases\EnumerableMappingTestCases.cs" />
     <Compile Include="TestCases\ArrayInjectionTestCases.cs" />
+    <Compile Include="TestCases\EventInjectionTestCases.cs" />
     <Compile Include="TestCases\ViewInjectionTestCases.cs" />
     <Compile Include="EnumerableMappingTests.cs" />
+    <Compile Include="EventInjectionTests.cs" />
     <Compile Include="ViewInjectionTests.cs" />
     <Compile Include="TestCases\TypeMappingTestCases.cs" />
     <Compile Include="TestCases\SimpleInjectionTestCases.cs" />

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Android.App;
 using Android.Widget;
 using Android.OS;
@@ -6,6 +7,7 @@ using Android.Views;
 using Android.Views.Animations;
 
 using Syringe;
+using Syringe.Attributes;
 
 namespace SyringeSample
 {
@@ -49,41 +51,39 @@ namespace SyringeSample
             footer.Text = "by " + authorText;
             hello.Text = sayHelloText;
 
-            headerViews.Add(title);
-            headerViews.Add(subtitle);
+            headerViews = new List<View> { title, subtitle };
 
             adapter = new SimpleAdapter(this);
             listview.Adapter = adapter;
         }
 
-        //[InjectClick(Resource.Id.hello)]
-        //private void OnSayHello()
-        //{
-        //    Toast.MakeText(this, "Hello, views!", ToastLength.Short).Show();
-        //
-        //    var index = 0;
-        //    foreach (var view in headerViews)
-        //    {
-        //        var anim = new AlphaAnimation(0.0f, 1.0f);
-        //        anim.FillBefore = true;
-        //        anim.Duration = 500;
-        //        anim.StartOffset = index++ * 100;
-        //        view.StartAnimation(anim);
-        //    }
-        //}
+        [InjectClick(Resource.Id.hello)]
+        private void OnSayHello(object sender, EventArgs e)
+        {
+            Toast.MakeText(this, "Hello, views!", ToastLength.Short).Show();
 
-        //[InjectLongClick(Resource.Id.hello)]
-        //private bool OnSayGetOffMe()
-        //{
-        //    Toast.MakeText(this, "Let go of me!", ToastLength.Short).Show();
-        //
-        //    return true;
-        //}
+            var index = 0;
+            foreach (var view in headerViews)
+            {
+                var anim = new AlphaAnimation(0.0f, 1.0f);
+                anim.FillBefore = true;
+                anim.Duration = 500;
+                anim.StartOffset = index++ * 100;
+                view.StartAnimation(anim);
+            }
+        }
 
-        //[InjectItemClick(Resource.Id.listview)]
-        //private void OnItemClick(int position)
-        //{
-        //    Toast.MakeText(this, "You clicked: " + adapter[position], ToastLength.Short).Show();
-        //}
+        [InjectLongClick(Resource.Id.hello)]
+        private void OnSayGetOffMe(object sender, View.LongClickEventArgs e)
+        {
+            Toast.MakeText(this, "Let go of me!", ToastLength.Short).Show();
+            e.Handled = true;
+        }
+
+        [InjectItemClick(Resource.Id.listview)]
+        private void OnItemClick(object sender, AdapterView.ItemClickEventArgs e)
+        {
+            Toast.MakeText(this, "You clicked: " + adapter[e.Position], ToastLength.Short).Show();
+        }
     }
 }
