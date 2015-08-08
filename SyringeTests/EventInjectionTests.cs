@@ -51,7 +51,7 @@ namespace SyringeTests
             {
                 Needle.Inject(target, view, Application.Context);
             });
-            Assert.AreEqual("Unable to attach delegate 'InvalidEvent' to event 'ItemLongClick'.", ex.Message);
+            Assert.AreEqual("Unable to find event 'ItemLongClick' for method 'InvalidEvent'.", ex.Message);
         }
 
         [Test]

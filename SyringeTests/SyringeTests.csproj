@@ -35,6 +35,20 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
+    <AndroidLinkSkip />
+    <AndroidLinkMode>Full</AndroidLinkMode>
+    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <BundleAssemblies>False</BundleAssemblies>
+    <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+    <AndroidSupportedAbis>armeabi,armeabi-v7a,x86,x86_64,arm64-v8a</AndroidSupportedAbis>
+    <AndroidStoreUncompressedFileExtensions />
+    <MandroidI18n />
+    <Debugger>Xamarin</Debugger>
+    <AotAssemblies>False</AotAssemblies>
+    <EnableLLVM>False</EnableLLVM>
+    <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
+    <EnableProguard>False</EnableProguard>
+    <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -47,6 +61,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrayResourceInjectionTests.cs" />
+    <Compile Include="InjectionPerformanceTests.cs">
+      <DependentUpon>InjectionPerformanceTests.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="TestCases\EnumerableMappingTestCases.cs" />
     <Compile Include="TestCases\ArrayInjectionTestCases.cs" />
     <Compile Include="TestCases\EventInjectionTestCases.cs" />
@@ -91,7 +110,14 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup />
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="InjectionPerformanceTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>InjectionPerformanceTests.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <ItemGroup />
 </Project>

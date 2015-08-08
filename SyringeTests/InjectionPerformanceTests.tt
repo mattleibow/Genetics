@@ -1,0 +1,175 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ Assembly Name="System.Core" #>
+<#@ Assembly Name="System.Windows.Forms" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #> 
+<#
+
+#>
+// This file was generated
+
+using System;
+using System.Diagnostics;
+using System.Xml;
+using Android.App;
+using Android.Content.Res;
+using Android.Graphics;
+using Android.Graphics.Drawables;
+using Android.Views.Animations;
+using Android.Animation;
+using NUnit.Framework;
+
+using Syringe;
+using Syringe.Attributes;
+using Syringe.Mappings;
+using SyringeTests.TestCases;
+
+namespace SyringeTests
+{
+    [TestFixture]
+    public class InjectionPerformanceTests
+    {
+        private const int AllowableOverhead = 100;
+
+        [SetUp]
+        public void Setup()
+        {
+            Needle.Debug = true;
+            Needle.DebugTextWriter = Console.Out;
+            Needle.ThrowOnError = true;
+        }
+
+        [TearDown]
+        public void Tear()
+        {
+        }
+
+<# // build up the test cases
+   foreach (var resourceType in resourceTypes)
+   {#>
+        public class <#= resourceType.Type #>PerformanceTestCase
+        {
+<#     foreach (var number in Enumerable.Range(1, PerformanceTestNumber))
+       {#>
+            [Inject(<#= resourceType.ResourceId #>)] <#= resourceType.ManagedType ?? resourceType.Type #> TestField<#= number #>;
+<#     } #>
+
+            public void InjectManually()
+            {
+                var context = Application.Context;
+                var resources = Application.Context.Resources;
+<#     foreach (var number in Enumerable.Range(1, PerformanceTestNumber))
+       {#>
+<#         if (resourceType.Type == "Animation")
+           {#>
+                TestField<#= number #> = AnimationUtils.LoadAnimation(context, <#= resourceType.ResourceId #>);
+<#         }
+           else if (resourceType.Type == "Animator")
+           {#>
+                TestField<#= number #> = AnimatorInflater.LoadAnimator(context, <#= resourceType.ResourceId #>);
+<#         }
+           else if (resourceType.Type == "TypedArray")
+           { #>
+                TestField<#= number #> = resources.ObtainTypedArray(<#= resourceType.ResourceId #>);
+<#         }
+           else
+           { #>
+                TestField<#= number #> = resources.Get<#= resourceType.Type #>(<#= resourceType.ResourceId #>);
+<#         } #>
+<#     } #>
+            }
+
+            public void InjectAutomatically()
+            {
+                var context = Application.Context;
+                Needle.Inject(this, null, context);
+            }
+
+            public void AssertNotDefault()
+            {
+<#     foreach (var number in Enumerable.Range(1, PerformanceTestNumber))
+       {#>
+<#         if (resourceType.Nullable)
+           {#>
+                Assert.IsNotNull(TestField<#= number #>);
+<#         }
+           else
+           { #>
+                Assert.AreNotEqual(typeof(<#= resourceType.ManagedType ?? resourceType.Type #>), TestField<#= number #>);
+<#         } #>
+<#     } #>
+            }
+        }
+<# } #>
+
+        [Test]
+        public void TypeMappingCreatedForAllSupportedMembers()
+        {
+<# foreach (var resourceType in resourceTypes)
+   {#>
+            {
+                var mapping = Needle.GetTypeMapping(typeof(<#= resourceType.Type #>PerformanceTestCase));
+                Assert.AreEqual(<#= PerformanceTestNumber #>, mapping.Members.Values.Count, "<#= resourceType.Type #> Performance Test Case");
+            }
+<# } #>
+        }
+
+<# foreach (var resourceType in resourceTypes)
+   {#>
+        [Test]
+        public void <#= resourceType.Type #>PerformanceTest()
+        {
+            var manualTimer = Stopwatch.StartNew();
+            var manual = new <#= resourceType.Type #>PerformanceTestCase();
+            manual.InjectManually();
+            manualTimer.Stop();
+            var manualTicks = manualTimer.ElapsedTicks;
+            
+            var automaticTimer = Stopwatch.StartNew();
+            var automatic = new <#= resourceType.Type #>PerformanceTestCase();
+            automatic.InjectAutomatically();
+            automaticTimer.Stop();
+            var automaticTicks = manualTimer.ElapsedTicks;
+
+            manual.AssertNotDefault();
+            automatic.AssertNotDefault();
+
+            Assert.IsTrue(Math.Abs(automaticTicks - manualTicks) < AllowableOverhead);
+        }
+
+<# } #>
+    }
+}
+
+<#+
+    const int PerformanceTestNumber = 100;
+
+    class ResourceType
+    {
+        public string ManagedType { get; set; }
+        public string Type { get; set; }
+        public string ResourceId { get; set; }
+        public bool Nullable { get; set; }
+    }
+
+    ResourceType[] resourceTypes = new ResourceType[] {
+        new ResourceType { Type = "Animation", ResourceId = "Resource.Animation.AnimationResource", Nullable = true },
+        new ResourceType { Type = "Animator", ResourceId = "Resource.Animator.AnimatorResource", Nullable = true },
+        new ResourceType { Type = "Drawable", ResourceId = "Resource.Drawable.Icon", Nullable = true },
+        new ResourceType { Type = "Boolean", ResourceId = "Resource.Boolean.BooleanResource" },
+        new ResourceType { Type = "Color", ResourceId = "Resource.Color.ColorResource" },
+        new ResourceType { Type = "ColorStateList", ResourceId = "Resource.Color.ColorStateListResource", Nullable = true },
+        new ResourceType { Type = "Dimension", ResourceId = "Resource.Dimension.DimensionResource", ManagedType = "Single" },
+        new ResourceType { Type = "Integer", ResourceId = "Resource.Integer.IntegerResource", ManagedType = "Int32" },
+        new ResourceType { Type = "String", ResourceId = "Resource.String.StringResource", Nullable = true },
+        new ResourceType { Type = "Xml", ResourceId = "Resource.Xml.XmlResource", Nullable = true, ManagedType = "XmlReader" },
+        new ResourceType { Type = "TypedArray", ResourceId = "Resource.Array.TypedArrayResource", Nullable = true },
+        new ResourceType { Type = "IntArray", ResourceId = "Resource.Array.IntegerArrayResource", ManagedType = "Int32[]", Nullable = true },
+        new ResourceType { Type = "StringArray", ResourceId = "Resource.Array.StringArrayResource", ManagedType = "String[]", Nullable = true },
+    };
+#>

@@ -89,6 +89,13 @@ namespace Syringe.EventNeedles
                             methodMapping.Attribute.EventName);
                     }
                 }
+                else
+                {
+                    Needle.HandleError(
+                        "Unable to find event '{0}' for method '{1}'.",
+                        methodMapping.Attribute.EventName,
+                        methodMapping.Method.Name);
+                }
             }
             return del;
         }
