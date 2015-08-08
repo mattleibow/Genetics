@@ -11,11 +11,11 @@ using Android.Views;
 using Android.Views.Animations;
 using Org.XmlPull.V1;
 
-using Syringe.Mappings;
+using Genetics.Mappings;
 
-namespace Syringe.Needles
+namespace Genetics.Genes
 {
-    public class DrawableNeedle : SimpleResourceNeedle
+    public class DrawableGene : SimpleResourceGene
     {
         public override object GetValue(Resources resources, int resourceId, Type memberType)
         {

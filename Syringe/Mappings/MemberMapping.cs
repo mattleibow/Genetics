@@ -1,13 +1,13 @@
 using System;
 using System.Reflection;
 
-using Syringe.Attributes;
+using Genetics.Attributes;
 
-namespace Syringe.Mappings
+namespace Genetics.Mappings
 {
     public class MemberMapping
     {
-        public MemberMapping(Type type, MemberInfo member, InjectAttribute attr)
+        public MemberMapping(Type type, MemberInfo member, SpliceAttribute attr)
         {
             Type = type;
             Member = member;
@@ -20,7 +20,7 @@ namespace Syringe.Mappings
 
         public virtual MemberInfo Member { get; protected set; }
 
-        public virtual InjectAttribute Attribute { get; protected set; }
+        public virtual SpliceAttribute Attribute { get; protected set; }
 
         public virtual Type MemberType { get; protected set; }
 
@@ -36,8 +36,8 @@ namespace Syringe.Mappings
                 var field = ((FieldInfo)Member);
                 if (field.IsInitOnly)
                 {
-                    Needle.HandleError(
-                        "Cannot inject '{0}' on '{1}' because it is readonly.",
+                    Geneticist.HandleError(
+                        "Cannot splice '{0}' on '{1}' because it is readonly.",
                         Member.Name,
                         Type.FullName);
                 }
@@ -53,8 +53,8 @@ namespace Syringe.Mappings
                 var property = ((PropertyInfo)Member);
                 if (property.SetMethod == null)
                 {
-                    Needle.HandleError(
-                        "Cannot inject '{0}' on '{1}' because it is readonly.",
+                    Geneticist.HandleError(
+                        "Cannot splice '{0}' on '{1}' because it is readonly.",
                         Member.Name,
                         Type.FullName);
                 }
@@ -67,8 +67,8 @@ namespace Syringe.Mappings
             }
             else
             {
-                Needle.HandleError(
-                    "The injection of '{0}' on '{1}' is not yet supported: {2}.",
+                Geneticist.HandleError(
+                    "The splice of '{0}' on '{1}' is not yet supported: {2}.",
                     Member.Name,
                     Type.FullName,
                     Member.MemberType);

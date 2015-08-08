@@ -3,10 +3,10 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 
-using Syringe;
-using SyringeTests.TestCases;
+using Genetics;
+using GeneticsTests.TestCases;
 
-namespace SyringeTests
+namespace GeneticsTests
 {
     [TestFixture]
     public class TypeMappingTests
@@ -14,9 +14,9 @@ namespace SyringeTests
         [SetUp]
         public void Setup()
         {
-            Needle.Debug = true;
-            Needle.DebugTextWriter = Console.Out;
-            Needle.ThrowOnError = true;
+            Geneticist.Debug = true;
+            Geneticist.DebugTextWriter = Console.Out;
+            Geneticist.ThrowOnError = true;
         }
 
         [TearDown]
@@ -27,8 +27,8 @@ namespace SyringeTests
         [Test]
         public void GettingTheSameTypeMappingTwiceUsesTheCache()
         {
-            var mapping1 = Needle.GetTypeMapping(typeof(Fields));
-            var mapping2 = Needle.GetTypeMapping(typeof(Fields));
+            var mapping1 = Geneticist.GetTypeMapping(typeof(Fields));
+            var mapping2 = Geneticist.GetTypeMapping(typeof(Fields));
 
             Assert.AreSame(mapping1, mapping2);
         }
@@ -43,7 +43,7 @@ namespace SyringeTests
                 new object[] { "protectedField", typeof(string) }
             };
 
-            var mapping = Needle.GetTypeMapping(typeof(Fields));
+            var mapping = Geneticist.GetTypeMapping(typeof(Fields));
 
             Assert.AreEqual(typeof(Fields), mapping.Type);
             Assert.AreEqual(3, mapping.Members.Count);
@@ -75,7 +75,7 @@ namespace SyringeTests
                 new object[] { "ProtectedProperty", typeof(string) }
             };
 
-            var mapping = Needle.GetTypeMapping(typeof(Properties));
+            var mapping = Geneticist.GetTypeMapping(typeof(Properties));
 
             Assert.AreEqual(typeof(Properties), mapping.Type);
             Assert.AreEqual(3, mapping.Members.Count);
@@ -100,52 +100,52 @@ namespace SyringeTests
         [Test]
         public void UnattributedMembersAreIgnored()
         {
-            var mapping = Needle.GetTypeMapping(typeof(IgnoredMembers));
+            var mapping = Geneticist.GetTypeMapping(typeof(IgnoredMembers));
 
             Assert.AreEqual(typeof(IgnoredMembers), mapping.Type);
             Assert.AreEqual(0, mapping.Members.Count);
         }
 
         [Test]
-        public void CannotInjectReadonlyMembers()
+        public void CannotSpliceReadonlyMembers()
         {
-            var count = Needle.MappedTypes.Length;
+            var count = Geneticist.MappedTypes.Length;
 
             // fields
-            Assert.Throws<InjectionException>(() =>
+            Assert.Throws<SpliceException>(() =>
             {
-                Needle.GetTypeMapping(typeof(PrivateReadonlyField));
-            }, "Should not be able to inject private readonly fields.");
-            Assert.IsFalse(Needle.MappedTypes.Contains(typeof(PrivateReadonlyField)));
-            Assert.Throws<InjectionException>(() =>
+                Geneticist.GetTypeMapping(typeof(PrivateReadonlyField));
+            }, "Should not be able to splice private readonly fields.");
+            Assert.IsFalse(Geneticist.MappedTypes.Contains(typeof(PrivateReadonlyField)));
+            Assert.Throws<SpliceException>(() =>
             {
-                Needle.GetTypeMapping(typeof(PublicReadonlyField));
-            }, "Should not be able to inject public readonly fields.");
-            Assert.IsFalse(Needle.MappedTypes.Contains(typeof(PublicReadonlyField)));
-            Assert.Throws<InjectionException>(() =>
+                Geneticist.GetTypeMapping(typeof(PublicReadonlyField));
+            }, "Should not be able to splice public readonly fields.");
+            Assert.IsFalse(Geneticist.MappedTypes.Contains(typeof(PublicReadonlyField)));
+            Assert.Throws<SpliceException>(() =>
             {
-                Needle.GetTypeMapping(typeof(ProtectedReadonlyField));
-            }, "Should not be able to inject protected readonly fields.");
-            Assert.IsFalse(Needle.MappedTypes.Contains(typeof(ProtectedReadonlyField)));
+                Geneticist.GetTypeMapping(typeof(ProtectedReadonlyField));
+            }, "Should not be able to splice protected readonly fields.");
+            Assert.IsFalse(Geneticist.MappedTypes.Contains(typeof(ProtectedReadonlyField)));
 
             // properties
-            Assert.Throws<InjectionException>(() =>
+            Assert.Throws<SpliceException>(() =>
             {
-                Needle.GetTypeMapping(typeof(PrivateReadonlyProperty));
-            }, "Should not be able to inject private readonly properties.");
-            Assert.IsFalse(Needle.MappedTypes.Contains(typeof(PrivateReadonlyProperty)));
-            Assert.Throws<InjectionException>(() =>
+                Geneticist.GetTypeMapping(typeof(PrivateReadonlyProperty));
+            }, "Should not be able to splice private readonly properties.");
+            Assert.IsFalse(Geneticist.MappedTypes.Contains(typeof(PrivateReadonlyProperty)));
+            Assert.Throws<SpliceException>(() =>
             {
-                Needle.GetTypeMapping(typeof(PublicReadonlyProperty));
-            }, "Should not be able to inject public readonly properties.");
-            Assert.IsFalse(Needle.MappedTypes.Contains(typeof(PublicReadonlyProperty)));
-            Assert.Throws<InjectionException>(() =>
+                Geneticist.GetTypeMapping(typeof(PublicReadonlyProperty));
+            }, "Should not be able to splice public readonly properties.");
+            Assert.IsFalse(Geneticist.MappedTypes.Contains(typeof(PublicReadonlyProperty)));
+            Assert.Throws<SpliceException>(() =>
             {
-                Needle.GetTypeMapping(typeof(ProtectedReadonlyProperty));
-            }, "Should not be able to inject protected readonly properties.");
-            Assert.IsFalse(Needle.MappedTypes.Contains(typeof(ProtectedReadonlyProperty)));
+                Geneticist.GetTypeMapping(typeof(ProtectedReadonlyProperty));
+            }, "Should not be able to splice protected readonly properties.");
+            Assert.IsFalse(Geneticist.MappedTypes.Contains(typeof(ProtectedReadonlyProperty)));
 
-            Assert.AreEqual(count, Needle.MappedTypes.Length);
+            Assert.AreEqual(count, Geneticist.MappedTypes.Length);
         }
     }
 }

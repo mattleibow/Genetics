@@ -24,15 +24,15 @@ using Android.Views.Animations;
 using Android.Animation;
 using NUnit.Framework;
 
-using Syringe;
-using Syringe.Attributes;
-using Syringe.Mappings;
-using SyringeTests.TestCases;
+using Genetics;
+using Genetics.Attributes;
+using Genetics.Mappings;
+using GeneticsTests.TestCases;
 
-namespace SyringeTests
+namespace GeneticsTests
 {
     [TestFixture]
-    public class InjectionPerformanceTests
+    public class SplicePerformanceTests
     {
         private const int AllowableOverhead = 100;
 
@@ -56,10 +56,10 @@ namespace SyringeTests
         {
 <#     foreach (var number in Enumerable.Range(1, PerformanceTestNumber))
        {#>
-            [Inject(<#= resourceType.ResourceId #>)] <#= resourceType.ManagedType ?? resourceType.Type #> TestField<#= number #>;
+            [Splice(<#= resourceType.ResourceId #>)] <#= resourceType.ManagedType ?? resourceType.Type #> TestField<#= number #>;
 <#     } #>
 
-            public void InjectManually()
+            public void SpliceManually()
             {
                 var context = Application.Context;
                 var resources = Application.Context.Resources;
@@ -84,10 +84,10 @@ namespace SyringeTests
 <#     } #>
             }
 
-            public void InjectAutomatically()
+            public void SpliceAutomatically()
             {
                 var context = Application.Context;
-                Needle.Inject(this, null, context);
+                Geneticist.Splice(this, null, context);
             }
 
             public void AssertNotDefault()
@@ -126,13 +126,13 @@ namespace SyringeTests
         {
             var manualTimer = Stopwatch.StartNew();
             var manual = new <#= resourceType.Type #>PerformanceTestCase();
-            manual.InjectManually();
+            manual.SpliceManually();
             manualTimer.Stop();
             var manualTicks = manualTimer.ElapsedTicks;
             
             var automaticTimer = Stopwatch.StartNew();
             var automatic = new <#= resourceType.Type #>PerformanceTestCase();
-            automatic.InjectAutomatically();
+            automatic.SpliceAutomatically();
             automaticTimer.Stop();
             var automaticTicks = manualTimer.ElapsedTicks;
 

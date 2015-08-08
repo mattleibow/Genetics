@@ -11,23 +11,23 @@ using Android.Views;
 using Android.Views.Animations;
 using Org.XmlPull.V1;
 
-using Syringe.Mappings;
+using Genetics.Mappings;
 
-namespace Syringe.Needles
+namespace Genetics.Genes
 {
-    public class ViewNeedle : INeedle
+    public class ViewGene : IGene
     {
 		private static readonly Type javaObjectType;
 
-		static ViewNeedle()
+		static ViewGene()
 		{
 			javaObjectType = typeof(IJavaObject);
 		}
 
-        public bool Inject(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
+        public bool Splice(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
         {
             var assigned = false;
-            var value = SyringeExtensions.FindViewById(source, resourceId);
+            var value = GeneticsExtensions.FindViewById(source, resourceId);
             if (value != null)
             {
                 var valueType = value.GetType();
@@ -48,14 +48,14 @@ namespace Syringe.Needles
             }
             else
             {
-                Needle.HandleError(
+                Geneticist.HandleError(
                     "Unknown view container type '{0}'.",
                     source.GetType().FullName);
             }
             return assigned;
         }
 
-        public void Withdraw(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
+        public void Sever(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
         {
             memberMapping.SetterMethod(target, null);
         }

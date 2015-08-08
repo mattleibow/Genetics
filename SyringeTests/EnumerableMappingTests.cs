@@ -3,10 +3,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-using Syringe;
-using SyringeTests.TestCases;
+using Genetics;
+using GeneticsTests.TestCases;
 
-namespace SyringeTests
+namespace GeneticsTests
 {
     [TestFixture]
     public class EnumerableMappingTests
@@ -14,9 +14,9 @@ namespace SyringeTests
         [SetUp]
         public void Setup()
         {
-            Needle.Debug = true;
-            Needle.DebugTextWriter = Console.Out;
-            Needle.ThrowOnError = true;
+            Geneticist.Debug = true;
+            Geneticist.DebugTextWriter = Console.Out;
+            Geneticist.ThrowOnError = true;
         }
 
         [TearDown]

@@ -3,20 +3,20 @@ using Android.App;
 using Android.Views;
 using NUnit.Framework;
 
-using Syringe;
-using SyringeTests.TestCases;
+using Genetics;
+using GeneticsTests.TestCases;
 
-namespace SyringeTests
+namespace GeneticsTests
 {
     [TestFixture]
-    public class ViewInjectionTests
+    public class ViewSpliceTests
     {
         [SetUp]
         public void Setup()
         {
-            Needle.Debug = true;
-            Needle.DebugTextWriter = Console.Out;
-            Needle.ThrowOnError = true;
+            Geneticist.Debug = true;
+            Geneticist.DebugTextWriter = Console.Out;
+            Geneticist.ThrowOnError = true;
         }
 
         [TearDown]
@@ -27,13 +27,13 @@ namespace SyringeTests
         [Test]
         public void TypeMappingCreatedForAllSupportedMembers()
 		{
-			var mapping = Needle.GetTypeMapping(typeof(SimpleViewsTargetObject));
+			var mapping = Geneticist.GetTypeMapping(typeof(SimpleViewsTargetObject));
 			Assert.AreEqual(4, mapping.Members.Values.Count);
 
-			mapping = Needle.GetTypeMapping(typeof(InvalidViewTypeTargetObject));
+			mapping = Geneticist.GetTypeMapping(typeof(InvalidViewTypeTargetObject));
 			Assert.AreEqual(1, mapping.Members.Values.Count);
 
-            //mapping = Needle.GetTypeMapping(typeof(JavaCastViewsTargetObject));
+            //mapping = Geneticist.GetTypeMapping(typeof(JavaCastViewsTargetObject));
             //Assert.AreEqual(4, mapping.Members.Values.Count);
         }
 
@@ -43,7 +43,7 @@ namespace SyringeTests
             var view = CreateView(Resource.Layout.SimpleLayout);
 
             var target = new SimpleViewsTargetObject();
-            Needle.Inject(target, view, Application.Context);
+            Geneticist.Splice(target, view, Application.Context);
 
             Assert.IsNotNull(target.ButtonProperty);
             Assert.IsNotNull(target.ButtonAsViewProperty);
@@ -62,7 +62,7 @@ namespace SyringeTests
             var target = new InvalidViewTypeTargetObject();
             Assert.Throws<InvalidCastException>(() =>
             {
-                Needle.Inject(target, view, Application.Context);
+                Geneticist.Splice(target, view, Application.Context);
             });
 		}
 
@@ -74,7 +74,7 @@ namespace SyringeTests
         //    var view = CreateView(Resource.Layout.JavaCastRequiredLayout);
         //
         //    var target = new JavaCastViewsTargetObject();
-        //    Needle.Inject(target, view, Application.Context);
+        //    Geneticist.Splice(target, view, Application.Context);
         //
         //    Assert.IsNotNull(target.ToolbarNativeAndNativeProperty);
         //    Assert.IsNotNull(target.ToolbarSupportButNativeProperty);
@@ -87,7 +87,7 @@ namespace SyringeTests
 
         private static View CreateView(int layout)
         {
-            var activity = SyringeTestsApplication.CurrentActivity;
+            var activity = GeneticsTestsApplication.CurrentActivity;
             var parent = (ViewGroup)activity.FindViewById(Android.Resource.Id.Content);
 
             var inflater = LayoutInflater.FromContext(Application.Context);

@@ -10,14 +10,14 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using System.Reflection;
-using Syringe.Mappings;
+using Genetics.Mappings;
 
-namespace Syringe.Attributes
+namespace Genetics.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public class InjectEventAttribute : Attribute
+    public class SpliceEventAttribute : Attribute
     {
-        public InjectEventAttribute(int viewId, string eventName)
+        public SpliceEventAttribute(int viewId, string eventName)
         {
             ViewId = viewId;
             EventName = eventName;
@@ -32,11 +32,11 @@ namespace Syringe.Attributes
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class InjectClickAttribute : InjectEventAttribute
+    public class SpliceClickAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
         static bool falseflag = false;
-        static InjectClickAttribute()
+        static SpliceClickAttribute()
         {
             if (falseflag)
             {
@@ -46,18 +46,18 @@ namespace Syringe.Attributes
         }
 #pragma warning restore 0219, 0649
 
-        public InjectClickAttribute(int viewId)
+        public SpliceClickAttribute(int viewId)
             : base(viewId, "Click")
         {
         }
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class InjectLongClickAttribute : InjectEventAttribute
+    public class SpliceLongClickAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
         static bool falseflag = false;
-        static InjectLongClickAttribute()
+        static SpliceLongClickAttribute()
         {
             if (falseflag)
             {
@@ -67,18 +67,18 @@ namespace Syringe.Attributes
         }
 #pragma warning restore 0219, 0649
 
-        public InjectLongClickAttribute(int viewId)
+        public SpliceLongClickAttribute(int viewId)
             : base(viewId, "LongClick")
         {
         }
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class InjectItemClickAttribute : InjectEventAttribute
+    public class SpliceItemClickAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
         static bool falseflag = false;
-        static InjectItemClickAttribute()
+        static SpliceItemClickAttribute()
         {
             if (falseflag)
             {
@@ -88,18 +88,18 @@ namespace Syringe.Attributes
         }
 #pragma warning restore 0219, 0649
 
-        public InjectItemClickAttribute(int viewId)
+        public SpliceItemClickAttribute(int viewId)
                 : base(viewId, "ItemClick")
         {
         }
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class InjectCheckedChangeAttribute : InjectEventAttribute
+    public class SpliceCheckedChangeAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
         static bool falseflag = false;
-        static InjectCheckedChangeAttribute()
+        static SpliceCheckedChangeAttribute()
         {
             if (falseflag)
             {
@@ -109,18 +109,18 @@ namespace Syringe.Attributes
         }
 #pragma warning restore 0219, 0649
 
-        public InjectCheckedChangeAttribute(int viewId)
+        public SpliceCheckedChangeAttribute(int viewId)
             : base(viewId, "CheckedChange")
         {
         }
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class InjectItemLongClickAttribute : InjectEventAttribute
+    public class SpliceItemLongClickAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
         static bool falseflag = false;
-        static InjectItemLongClickAttribute()
+        static SpliceItemLongClickAttribute()
         {
             if (falseflag)
             {
@@ -130,18 +130,18 @@ namespace Syringe.Attributes
         }
 #pragma warning restore 0219, 0649
 
-        public InjectItemLongClickAttribute(int viewId)
+        public SpliceItemLongClickAttribute(int viewId)
             : base(viewId, "ItemLongClick")
         {
         }
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class InjectItemSelectedAttribute : InjectEventAttribute
+    public class SpliceItemSelectedAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
         static bool falseflag = false;
-        static InjectItemSelectedAttribute()
+        static SpliceItemSelectedAttribute()
         {
             if (falseflag)
             {
@@ -151,18 +151,18 @@ namespace Syringe.Attributes
         }
 #pragma warning restore 0219, 0649
 
-        public InjectItemSelectedAttribute(int viewId)
+        public SpliceItemSelectedAttribute(int viewId)
             : base(viewId, "ItemSelected")
         {
         }
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class InjectTextChangedAttribute : InjectEventAttribute
+    public class SpliceTextChangedAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
         static bool falseflag = false;
-        static InjectTextChangedAttribute()
+        static SpliceTextChangedAttribute()
         {
             if (falseflag)
             {
@@ -172,18 +172,18 @@ namespace Syringe.Attributes
         }
 #pragma warning restore 0219, 0649
 
-        public InjectTextChangedAttribute(int viewId)
+        public SpliceTextChangedAttribute(int viewId)
             : base(viewId, "TextChanged")
         {
         }
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class InjectTouchAttribute : InjectEventAttribute
+    public class SpliceTouchAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
         static bool falseflag = false;
-        static InjectTouchAttribute()
+        static SpliceTouchAttribute()
         {
             if (falseflag)
             {
@@ -193,18 +193,18 @@ namespace Syringe.Attributes
         }
 #pragma warning restore 0219, 0649
 
-        public InjectTouchAttribute(int viewId)
+        public SpliceTouchAttribute(int viewId)
             : base(viewId, "Touch")
         {
         }
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class InjectFocusChangeAttribute : InjectEventAttribute
+    public class SpliceFocusChangeAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
         static bool falseflag = false;
-        static InjectFocusChangeAttribute()
+        static SpliceFocusChangeAttribute()
         {
             if (falseflag)
             {
@@ -214,18 +214,18 @@ namespace Syringe.Attributes
         }
 #pragma warning restore 0219, 0649
 
-        public InjectFocusChangeAttribute(int viewId)
+        public SpliceFocusChangeAttribute(int viewId)
             : base(viewId, "FocusChange")
         {
         }
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class InjectEditorActionAttribute : InjectEventAttribute
+    public class SpliceEditorActionAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
         static bool falseflag = false;
-        static InjectEditorActionAttribute()
+        static SpliceEditorActionAttribute()
         {
             if (falseflag)
             {
@@ -235,7 +235,7 @@ namespace Syringe.Attributes
         }
 #pragma warning restore 0219, 0649
 
-        public InjectEditorActionAttribute(int viewId)
+        public SpliceEditorActionAttribute(int viewId)
             : base(viewId, "EditorAction")
         {
         }

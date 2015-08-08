@@ -11,14 +11,14 @@ using Android.Views;
 using Android.Views.Animations;
 using Org.XmlPull.V1;
 
-using Syringe.Mappings;
+using Genetics.Mappings;
 
-namespace Syringe.Needles
+namespace Genetics.Genes
 {
-    public interface INeedle
+    public interface IGene
     {
-        bool Inject(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping);
+        bool Splice(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping);
 
-        void Withdraw(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping);
+        void Sever(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping);
     }
 }

@@ -1,13 +1,13 @@
 using Android.Content;
 using Android.Views;
-using Syringe.Mappings;
+using Genetics.Mappings;
 
-namespace Syringe.EventNeedles
+namespace Genetics.EventGenes
 {
-    public interface IEventNeedle
+    public interface IEventGene
     {
-        bool Inject(object target, object source, View view, Context context, MethodMapping methodMapping);
+        bool Splice(object target, object source, View view, Context context, MethodMapping methodMapping);
 
-        void Withdraw(object target, object source, View view, Context context, MethodMapping methodMapping);
+        void Sever(object target, object source, View view, Context context, MethodMapping methodMapping);
     }
 }

@@ -9,13 +9,13 @@ using Java.Interop;
 using Android.Views;
 using Android.App;
 
-namespace Syringe
+namespace Genetics
 {
-    public static class SyringeExtensions
+    public static class GeneticsExtensions
     {
         private readonly static MethodInfo javaCastMethod;
         private readonly static Type genericListType;
-        static SyringeExtensions()
+        static GeneticsExtensions()
         {
             javaCastMethod = typeof(JavaObjectExtensions).GetMethod("JavaCast", BindingFlags.Static | BindingFlags.Public);
             genericListType = typeof(List<>);

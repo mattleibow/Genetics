@@ -1,11 +1,11 @@
 using System;
 
-namespace Syringe.Attributes
+namespace Genetics.Attributes
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
-    public class InjectAttribute : Attribute
+    public class SpliceAttribute : Attribute
     {
-        public InjectAttribute(int resourceId)
+        public SpliceAttribute(int resourceId)
         {
             ResourceId = resourceId;
             Optional = false;
@@ -18,6 +18,6 @@ namespace Syringe.Attributes
 
         public Type Collection { get; set; }
 
-        public bool DisposeOnWithdraw { get; set; }
+        public bool DisposeOnSever { get; set; }
     }
 }

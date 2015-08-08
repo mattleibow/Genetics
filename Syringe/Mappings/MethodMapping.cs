@@ -1,13 +1,13 @@
 using System;
 using System.Reflection;
 
-using Syringe.Attributes;
+using Genetics.Attributes;
 
-namespace Syringe.Mappings
+namespace Genetics.Mappings
 {
     public class MethodMapping
     {
-        public MethodMapping(Type type, MethodInfo method, InjectEventAttribute attr)
+        public MethodMapping(Type type, MethodInfo method, SpliceEventAttribute attr)
         {
             Type = type;
             Method = method;
@@ -20,7 +20,7 @@ namespace Syringe.Mappings
 
         public virtual MethodInfo Method { get; protected set; }
 
-        public virtual InjectEventAttribute Attribute { get; protected set; }
+        public virtual SpliceEventAttribute Attribute { get; protected set; }
 
         private void MapMethod()
         {

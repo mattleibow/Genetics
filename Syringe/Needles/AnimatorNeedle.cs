@@ -11,20 +11,20 @@ using Android.Views;
 using Android.Views.Animations;
 using Org.XmlPull.V1;
 
-using Syringe.Mappings;
+using Genetics.Mappings;
 
-namespace Syringe.Needles
+namespace Genetics.Genes
 {
-    public class AnimatorNeedle : INeedle
+    public class AnimatorGene : IGene
     {
-        public bool Inject(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
+        public bool Splice(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
         {
             var value = AnimatorInflater.LoadAnimator(context, resourceId);
             memberMapping.SetterMethod(target, value);
             return value != null;
         }
 
-        public void Withdraw(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
+        public void Sever(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
         {
         }
     }

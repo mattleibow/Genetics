@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-using Syringe.Attributes;
+using Genetics.Attributes;
 
-namespace Syringe.Mappings
+namespace Genetics.Mappings
 {
     public class TypeMapping
     {
@@ -29,7 +29,7 @@ namespace Syringe.Mappings
             var targetMembers = Type.GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             foreach (var member in targetMembers)
             {
-                var attr = member.GetCustomAttribute<InjectAttribute>(false);
+                var attr = member.GetCustomAttribute<SpliceAttribute>(false);
                 if (attr != null)
                 {
                     var mapping = new MemberMapping(Type, member, attr);
@@ -41,7 +41,7 @@ namespace Syringe.Mappings
             var targeMethods = Type.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
             foreach (var method in targeMethods)
             {
-                var attr = method.GetCustomAttribute<InjectEventAttribute>(false);
+                var attr = method.GetCustomAttribute<SpliceEventAttribute>(false);
                 if (attr != null)
                 {
                     var mapping = new MethodMapping(Type, method, attr);

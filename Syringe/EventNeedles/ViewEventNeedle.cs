@@ -3,18 +3,18 @@ using System.Reflection;
 using Android.Content;
 using Android.Views;
 
-using Syringe.Mappings;
+using Genetics.Mappings;
 
-namespace Syringe.EventNeedles
+namespace Genetics.EventGenes
 {
-    public class ViewEventNeedle : IEventNeedle
+    public class ViewEventGene : IEventGene
     {
-        public virtual bool Inject(object target, object source, View view, Context context, MethodMapping methodMapping)
+        public virtual bool Splice(object target, object source, View view, Context context, MethodMapping methodMapping)
         {
             return AttachDelegate(target, view, methodMapping);
         }
 
-        public virtual void Withdraw(object target, object source, View view, Context context, MethodMapping methodMapping)
+        public virtual void Sever(object target, object source, View view, Context context, MethodMapping methodMapping)
         {
             DetachDelegate(target, view, methodMapping);
         }
@@ -34,7 +34,7 @@ namespace Syringe.EventNeedles
             }
             catch (Exception ex)
             {
-                Needle.HandleError(
+                Geneticist.HandleError(
                     ex,
                     "Unable to attach delegate '{0}' to event '{1}'.",
                     methodMapping.Method.Name,
@@ -58,7 +58,7 @@ namespace Syringe.EventNeedles
             }
             catch (Exception ex)
             {
-                Needle.HandleError(
+                Geneticist.HandleError(
                     ex,
                     "Unable to detach delegate '{0}' from event '{1}'.",
                     methodMapping.Method.Name,
@@ -82,7 +82,7 @@ namespace Syringe.EventNeedles
                     }
                     catch (Exception ex)
                     {
-                        Needle.HandleError(
+                        Geneticist.HandleError(
                             ex,
                             "Error creating delegate from '{0}' for event '{1}'.",
                             methodMapping.Method.Name,
@@ -91,7 +91,7 @@ namespace Syringe.EventNeedles
                 }
                 else
                 {
-                    Needle.HandleError(
+                    Geneticist.HandleError(
                         "Unable to find event '{0}' for method '{1}'.",
                         methodMapping.Attribute.EventName,
                         methodMapping.Method.Name);

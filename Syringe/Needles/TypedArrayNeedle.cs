@@ -11,20 +11,20 @@ using Android.Views;
 using Android.Views.Animations;
 using Org.XmlPull.V1;
 
-using Syringe.Mappings;
+using Genetics.Mappings;
 
-namespace Syringe.Needles
+namespace Genetics.Genes
 {
-    public class TypedArrayNeedle : SimpleResourceNeedle
+    public class TypedArrayGene : SimpleResourceGene
     {
         public override object GetValue(Resources resources, int resourceId, Type memberType)
         {
             return resources.ObtainTypedArray(resourceId);
         }
 
-        public override void Withdraw(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
+        public override void Sever(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
         {
-            if (memberMapping.Attribute.DisposeOnWithdraw)
+            if (memberMapping.Attribute.DisposeOnSever)
             {
                 var typedArray = memberMapping.GetterMethod(target) as TypedArray;
                 if (typedArray != null)

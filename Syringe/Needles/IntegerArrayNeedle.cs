@@ -11,17 +11,17 @@ using Android.Views;
 using Android.Views.Animations;
 using Org.XmlPull.V1;
 
-using Syringe.Mappings;
+using Genetics.Mappings;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Syringe.Needles
+namespace Genetics.Genes
 {
-    public abstract class ArrayResourceNeedle : INeedle
+    public abstract class ArrayResourceGene : IGene
     {
-        public virtual bool Inject(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
+        public virtual bool Splice(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
         {
             var value = GetArrayValue(context.Resources, resourceId, memberMapping.MemberType);
             if (value != null)
@@ -32,14 +32,14 @@ namespace Syringe.Needles
             return value != null;
         }
         
-        public void Withdraw(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
+        public void Sever(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
         {
         }
 
         public abstract IEnumerable GetArrayValue(Resources resources, int resourceId, Type memberType);
     }
 
-    public class IntegerArrayNeedle : ArrayResourceNeedle
+    public class IntegerArrayGene : ArrayResourceGene
     {
         public override IEnumerable GetArrayValue(Resources resources, int resourceId, Type memberType)
         {
@@ -60,7 +60,7 @@ namespace Syringe.Needles
         }
     }
 
-    public class StringArrayNeedle : SimpleResourceNeedle
+    public class StringArrayGene : SimpleResourceGene
     {
         public override object GetValue(Resources resources, int resourceId, Type memberType)
         {

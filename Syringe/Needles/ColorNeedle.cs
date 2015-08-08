@@ -11,13 +11,13 @@ using Android.Views;
 using Android.Views.Animations;
 using Org.XmlPull.V1;
 
-using Syringe.Mappings;
+using Genetics.Mappings;
 
-namespace Syringe.Needles
+namespace Genetics.Genes
 {
-    public class ColorNeedle : INeedle
+    public class ColorGene : IGene
     {
-        public bool Inject(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
+        public bool Splice(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
         {
             var assigned = false;
             var value = context.Resources.GetColor(resourceId);
@@ -34,7 +34,7 @@ namespace Syringe.Needles
             return assigned;
         }
 
-        public void Withdraw(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
+        public void Sever(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
         {
         }
     }

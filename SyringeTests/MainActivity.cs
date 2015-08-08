@@ -5,9 +5,9 @@ using Android.OS;
 using Android.Runtime;
 using Xamarin.Android.NUnitLite;
 
-namespace SyringeTests
+namespace GeneticsTests
 {
-    [Activity(Label = "SyringeTests", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "GeneticsTests", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : TestSuiteActivity
     {
         protected override void OnCreate(Bundle bundle)
@@ -24,9 +24,9 @@ namespace SyringeTests
     }
 
     [Application]
-    public class SyringeTestsApplication : Application, Application.IActivityLifecycleCallbacks
+    public class GeneticsTestsApplication : Application, Application.IActivityLifecycleCallbacks
     {
-        protected SyringeTestsApplication(IntPtr javaReference, JniHandleOwnership transfer)
+        protected GeneticsTestsApplication(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
         }

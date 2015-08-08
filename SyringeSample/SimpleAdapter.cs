@@ -2,20 +2,20 @@ using Android.Content;
 using Android.Views;
 using Android.Widget;
 
-using Syringe;
-using Syringe.Attributes;
+using Genetics;
+using Genetics.Attributes;
 
-namespace SyringeSample
+namespace GeneticsSample
 {
     public class SimpleAdapter : BaseAdapter<string>
     {
-        [Inject(Resource.Array.listContents)]
+        [Splice(Resource.Array.listContents)]
         private string[] contents;
         private readonly LayoutInflater inflater;
 
         public SimpleAdapter(Context context)
         {
-            Needle.Inject(this, context);
+            Geneticist.Splice(this, context);
 
             inflater = LayoutInflater.FromContext(context);
         }
@@ -62,13 +62,13 @@ namespace SyringeSample
 
         private class ViewHolder : Java.Lang.Object
         {
-            [Inject(Resource.Id.word)] public TextView word;
-            [Inject(Resource.Id.length)] public TextView length;
-            [Inject(Resource.Id.position)] public TextView position;
+            [Splice(Resource.Id.word)] public TextView word;
+            [Splice(Resource.Id.length)] public TextView length;
+            [Splice(Resource.Id.position)] public TextView position;
 
             public ViewHolder(View view)
             {
-                Needle.Inject(this, view);
+                Geneticist.Splice(this, view);
             }
         }
     }

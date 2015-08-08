@@ -4,20 +4,20 @@ using Android.App;
 using Android.Graphics;
 using NUnit.Framework;
 
-using Syringe;
-using SyringeTests.TestCases;
+using Genetics;
+using GeneticsTests.TestCases;
 
-namespace SyringeTests
+namespace GeneticsTests
 {
     [TestFixture]
-    public class ArrayResourceInjectionTests
+    public class ArrayResourceSpliceTests
     {
         [SetUp]
         public void Setup()
         {
-            Needle.Debug = true;
-            Needle.DebugTextWriter = Console.Out;
-            Needle.ThrowOnError = true;
+            Geneticist.Debug = true;
+            Geneticist.DebugTextWriter = Console.Out;
+            Geneticist.ThrowOnError = true;
         }
 
         [TearDown]
@@ -28,24 +28,24 @@ namespace SyringeTests
         [Test]
         public void TypeMappingCreatedForAllSupportedMembers()
         {
-            var mapping = Needle.GetTypeMapping(typeof(ArraysTargetObject));
+            var mapping = Geneticist.GetTypeMapping(typeof(ArraysTargetObject));
             Assert.AreEqual(3, mapping.Members.Values.Count);
 
-            mapping = Needle.GetTypeMapping(typeof(ArrayTypeTargetObject));
+            mapping = Geneticist.GetTypeMapping(typeof(ArrayTypeTargetObject));
             Assert.AreEqual(5, mapping.Members.Values.Count);
 
-            mapping = Needle.GetTypeMapping(typeof(InvalidArrayTypeTargetObject));
+            mapping = Geneticist.GetTypeMapping(typeof(InvalidArrayTypeTargetObject));
             Assert.AreEqual(1, mapping.Members.Values.Count);
 
-            mapping = Needle.GetTypeMapping(typeof(InvalidTypeTargetObject));
+            mapping = Geneticist.GetTypeMapping(typeof(InvalidTypeTargetObject));
             Assert.AreEqual(1, mapping.Members.Values.Count);
         }
 
         [Test]
-        public void SimpleArrayInjected()
+        public void SimpleArraySpliceed()
         {
             var target = new ArraysTargetObject();
-            Needle.Inject(target, null, Application.Context);
+            Geneticist.Splice(target, null, Application.Context);
 
             var intArray = target.IntegerArrayProperty;
             Assert.IsNotNull(intArray);
@@ -61,10 +61,10 @@ namespace SyringeTests
         }
 
         [Test]
-        public void VariousCollectionTypesInjected()
+        public void VariousCollectionTypesSpliceed()
         {
             var target = new ArrayTypeTargetObject();
-            Needle.Inject(target, null, Application.Context);
+            Geneticist.Splice(target, null, Application.Context);
 
             var integerArrays = new[] 
             {
@@ -88,10 +88,10 @@ namespace SyringeTests
         }
 
         [Test]
-        public void TypedArrayInjected()
+        public void TypedArraySpliceed()
         {
             var target = new ArraysTargetObject();
-            Needle.Inject(target, null, Application.Context);
+            Geneticist.Splice(target, null, Application.Context);
 
             var typedArray = target.TypedArrayProperty;
             Assert.IsNotNull(typedArray);
@@ -104,7 +104,7 @@ namespace SyringeTests
         public void InvalidArrayTypeTargetIsInvalid()
         {
             var target = new InvalidArrayTypeTargetObject();
-            Needle.Inject(target, null, Application.Context);
+            Geneticist.Splice(target, null, Application.Context);
 
             // the length is right, but the items are not
             var intArray = target.IntegerArrayProperty;
@@ -118,9 +118,9 @@ namespace SyringeTests
         public void InvalidTypeTargetThrows()
         {
             var target = new InvalidTypeTargetObject();
-            Assert.Throws<InjectionException>(() =>
+            Assert.Throws<SpliceException>(() =>
             {
-                Needle.Inject(target, null, Application.Context);
+                Geneticist.Splice(target, null, Application.Context);
             });
         }
     }

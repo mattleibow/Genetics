@@ -6,29 +6,29 @@ using Android.App;
 using Android.Content;
 using Android.Views;
 
-using Syringe.Mappings;
-using Syringe.Needles;
-using Syringe.EventNeedles;
+using Genetics.Mappings;
+using Genetics.Genes;
+using Genetics.EventGenes;
 
-namespace Syringe
+namespace Genetics
 {
-    public static class Needle
+    public static class Geneticist
     {
-        private readonly static Dictionary<string, Dictionary<Type, INeedle>> needles;
-        private readonly static Dictionary<Type, IEventNeedle> eventNeedles;
+        private readonly static Dictionary<string, Dictionary<Type, IGene>> genes;
+        private readonly static Dictionary<Type, IEventGene> eventGenes;
         private readonly static Dictionary<Type, TypeMapping> typeMappings;
 
-        static Needle()
+        static Geneticist()
         {
             typeMappings = new Dictionary<Type, TypeMapping>();
-            needles = new Dictionary<string, Dictionary<Type, INeedle>>();
-            eventNeedles = new Dictionary<Type, IEventNeedle>();
+            genes = new Dictionary<string, Dictionary<Type, IGene>>();
+            eventGenes = new Dictionary<Type, IEventGene>();
             ThrowOnError = true;
             Debug = false;
             DebugTextWriter = null;
 
-            RegisterDefaultNeedles();
-            RegisterDefaultEventNeedles();
+            RegisterDefaultGenes();
+            RegisterDefaultEventGenes();
         }
 
         public static Type[] MappedTypes
@@ -47,47 +47,47 @@ namespace Syringe
 
         public static bool ThrowOnError { get; set; }
 
-        public static void Inject(Activity target)
+        public static void Splice(Activity target)
         {
-            Inject(target, target);
+            Splice(target, target);
         }
 
-        public static void Inject(View target)
+        public static void Splice(View target)
         {
-            Inject(target, target);
+            Splice(target, target);
         }
 
-        public static void Inject(Dialog target)
+        public static void Splice(Dialog target)
         {
-            Inject(target, target);
+            Splice(target, target);
         }
 
-        public static void Inject(object target, Context context)
+        public static void Splice(object target, Context context)
         {
-            Inject(target, target, (src) => context);
+            Splice(target, target, (src) => context);
         }
 
-        public static void Inject(object target, Activity source)
+        public static void Splice(object target, Activity source)
         {
-            Inject(target, source, (src) => src);
+            Splice(target, source, (src) => src);
         }
 
-        public static void Inject(object target, View source)
+        public static void Splice(object target, View source)
         {
-            Inject(target, source, (src) => src.Context);
+            Splice(target, source, (src) => src.Context);
         }
 
-        public static void Inject(object target, Dialog source)
+        public static void Splice(object target, Dialog source)
         {
-            Inject(target, source, (src) => src.Context);
+            Splice(target, source, (src) => src.Context);
         }
 
-        public static void Inject(object target, object source, Context context)
+        public static void Splice(object target, object source, Context context)
         {
-            Inject(target, source, (src) => context);
+            Splice(target, source, (src) => context);
         }
 
-        public static void Inject<T>(object target, T source, Func<T, Context> getContext)
+        public static void Splice<T>(object target, T source, Func<T, Context> getContext)
         {
             Context context = null;
 
@@ -119,20 +119,20 @@ namespace Syringe
 
         private static void ProcessMemberMapping(object target, object source, Context context, MemberMapping memberMapping)
         {
-            var memberInjected = false;
+            var memberSpliceed = false;
             var attr = memberMapping.Attribute;
             var memberType = memberMapping.MemberType;
             var resourceId = attr.ResourceId;
             var resourceType = context.Resources.GetResourceTypeName(resourceId);
 
-            var needle = GetNeedle(resourceType, memberMapping);
-            if (needle != null)
+            var gene = GetGene(resourceType, memberMapping);
+            if (gene != null)
             {
-                memberInjected = needle.Inject(target, source, resourceType, resourceId, context, memberMapping);
-                if (memberInjected)
+                memberSpliceed = gene.Splice(target, source, resourceType, resourceId, context, memberMapping);
+                if (memberSpliceed)
                 {
                     HandleMessage(
-                        "Injected resource '{0}' with id '{1}' to member '{2}'.",
+                        "Spliceed resource '{0}' with id '{1}' to member '{2}'.",
                         context.Resources.GetResourceName(resourceId),
                         resourceId,
                         memberMapping.Member.Name);
@@ -142,7 +142,7 @@ namespace Syringe
                     if (memberMapping.Attribute.Optional)
                     {
                         HandleMessage(
-                            "Skipping injection for resource '{0}' with id '{1}' to member '{2}'.",
+                            "Skipping splice for resource '{0}' with id '{1}' to member '{2}'.",
                             context.Resources.GetResourceName(resourceId),
                             resourceId,
                             memberMapping.Member.Name);
@@ -150,7 +150,7 @@ namespace Syringe
                     else
                     {
                         HandleError(
-                            "Unable to inject resource '{0}' with id '{1}' to member '{2}'.",
+                            "Unable to splice resource '{0}' with id '{1}' to member '{2}'.",
                             context.Resources.GetResourceName(resourceId),
                             resourceId,
                             memberMapping.Member.Name);
@@ -160,7 +160,7 @@ namespace Syringe
             else
             {
                 HandleError(
-                    "No member needle found for resource type '{0}' and member type '{1}'.",
+                    "No member gene found for resource type '{0}' and member type '{1}'.",
                     resourceType,
                     memberMapping.MemberType.FullName);
             }
@@ -168,21 +168,21 @@ namespace Syringe
 
         private static void ProcessMethodMapping(object target, object source, Context context, MethodMapping methodMapping)
         {
-            var methodInjected = false;
+            var methodSpliceed = false;
             var attr = methodMapping.Attribute;
-            var view = SyringeExtensions.FindViewById(source, attr.ViewId);
+            var view = GeneticsExtensions.FindViewById(source, attr.ViewId);
 
             if (view != null)
             {
-                var needle = GetEventNeedle(view.GetType(), methodMapping);
-                if (needle != null)
+                var gene = GetEventGene(view.GetType(), methodMapping);
+                if (gene != null)
                 {
-                    methodInjected = needle.Inject(target, source, view, context, methodMapping);
+                    methodSpliceed = gene.Splice(target, source, view, context, methodMapping);
 
-                    if (methodInjected)
+                    if (methodSpliceed)
                     {
                         HandleMessage(
-                            "Injected handler for event '{0}' on view with id '{1}' for method '{2}'.",
+                            "Spliceed handler for event '{0}' on view with id '{1}' for method '{2}'.",
                             attr.EventName,
                             context.Resources.GetResourceName(attr.ViewId),
                             methodMapping.Method.Name);
@@ -192,7 +192,7 @@ namespace Syringe
                         if (methodMapping.Attribute.Optional)
                         {
                             HandleMessage(
-                                "Skipping injection of handler for event '{0}' with id '{1}' for method '{2}'.",
+                                "Skipping splice of handler for event '{0}' with id '{1}' for method '{2}'.",
                                 attr.EventName,
                                 context.Resources.GetResourceName(attr.ViewId),
                                 methodMapping.Method.Name);
@@ -200,7 +200,7 @@ namespace Syringe
                         else
                         {
                             HandleError(
-                                "Unable to inject handler for event '{0}' with id '{1}' for method '{2}'.",
+                                "Unable to splice handler for event '{0}' with id '{1}' for method '{2}'.",
                                 attr.EventName,
                                 context.Resources.GetResourceName(attr.ViewId),
                                 methodMapping.Method.Name);
@@ -210,7 +210,7 @@ namespace Syringe
                 else
                 {
                     HandleError(
-                        "No event needle found for event '{0}' on view with id '{1}' for method '{2}'.",
+                        "No event gene found for event '{0}' on view with id '{1}' for method '{2}'.",
                         attr.EventName,
                         context.Resources.GetResourceName(attr.ViewId),
                         methodMapping.Method.Name);
@@ -225,21 +225,21 @@ namespace Syringe
             }
         }
 
-        public static void Withdraw(object target)
+        public static void Sever(object target)
         {
             //Class <?> targetClass = target.getClass();
             //try
             //{
-            //    if (debug) Log.d(TAG, "Looking up view needle for " + targetClass.getName());
-            //    ViewNeedle<Object> viewNeedle = findViewNeedleForClass(targetClass);
-            //    if (viewNeedle != null)
+            //    if (debug) Log.d(TAG, "Looking up view gene for " + targetClass.getName());
+            //    ViewGene<Object> viewGene = findViewGeneForClass(targetClass);
+            //    if (viewGene != null)
             //    {
-            //        viewNeedle.uninject(target);
+            //        viewGene.unsplice(target);
             //    }
             //}
             //catch (Exception e)
             //{
-            //    throw new RuntimeException("Unable to uninject views for " + targetClass.getName(), e);
+            //    throw new RuntimeException("Unable to unsplice views for " + targetClass.getName(), e);
             //}
         }
 
@@ -273,7 +273,7 @@ namespace Syringe
             }
             else
             {
-                // we need to build the injection
+                // we need to build the splice
                 HandleMessage("Creating a new TypeMapping for type {0}.", type);
                 mapping = new TypeMapping(type);
                 typeMappings.Add(type, mapping);
@@ -282,169 +282,169 @@ namespace Syringe
             return mapping;
         }
 
-        public static INeedle GetNeedle(string resourceType, MemberMapping member)
+        public static IGene GetGene(string resourceType, MemberMapping member)
         {
-            INeedle needle = null;
+            IGene gene = null;
 
-            Dictionary<Type, INeedle> possibleNeedles;
-            if (needles.TryGetValue(resourceType, out possibleNeedles))
+            Dictionary<Type, IGene> possibleGenes;
+            if (genes.TryGetValue(resourceType, out possibleGenes))
             {
-                if (!possibleNeedles.TryGetValue(member.MemberType, out needle))
+                if (!possibleGenes.TryGetValue(member.MemberType, out gene))
                 {
                     // this could be enhanced to find the most specific possibility
-                    foreach (var possibility in possibleNeedles)
+                    foreach (var possibility in possibleGenes)
                     {
                         if (possibility.Key.IsAssignableFrom(member.MemberType))
                         {
-                            needle = possibility.Value;
+                            gene = possibility.Value;
                             break;
                         }
                     }
                 }
                 //else
                 //{
-                //    // needle is already set by TryGetValue
+                //    // gene is already set by TryGetValue
                 //}
             }
 
-            if (needle != null)
+            if (gene != null)
             {
                 HandleMessage(
-                    "Found member needle for resource type '{0}' and member type '{1}': {2}",
+                    "Found member gene for resource type '{0}' and member type '{1}': {2}",
                     resourceType,
                     member.MemberType.FullName,
-                    needle.GetType().FullName);
+                    gene.GetType().FullName);
             }
 
-            return needle;
+            return gene;
         }
 
-        public static IEventNeedle GetEventNeedle(Type viewType, MethodMapping method)
+        public static IEventGene GetEventGene(Type viewType, MethodMapping method)
         {
-            IEventNeedle needle = null;
-            if (!eventNeedles.TryGetValue(viewType, out needle))
+            IEventGene gene = null;
+            if (!eventGenes.TryGetValue(viewType, out gene))
             {
                 // this could be enhanced to find the most specific possibility
-                foreach (var possibility in eventNeedles)
+                foreach (var possibility in eventGenes)
                 {
                     if (possibility.Key.IsAssignableFrom(viewType))
                     {
-                        needle = possibility.Value;
+                        gene = possibility.Value;
                         break;
                     }
                 }
             }
             //else
             //{
-            //    // needle is already set by TryGetValue
+            //    // gene is already set by TryGetValue
             //}
 
-            if (needle != null)
+            if (gene != null)
             {
                 HandleMessage(
-                    "Found event needle for view type '{0}': {1}",
+                    "Found event gene for view type '{0}': {1}",
                     viewType.FullName,
-                    needle.GetType().FullName);
+                    gene.GetType().FullName);
             }
 
-            return needle;
+            return gene;
         }
 
-        public static void RegisterNeedle(string resourceType, Type targetType, INeedle needle)
+        public static void RegisterGene(string resourceType, Type targetType, IGene gene)
         {
-            Dictionary<Type, INeedle> needleCollection;
-            if (!needles.TryGetValue(resourceType, out needleCollection))
+            Dictionary<Type, IGene> geneCollection;
+            if (!genes.TryGetValue(resourceType, out geneCollection))
             {
-                needleCollection = new Dictionary<Type, INeedle>();
-                needles.Add(resourceType, needleCollection);
+                geneCollection = new Dictionary<Type, IGene>();
+                genes.Add(resourceType, geneCollection);
                 HandleMessage(
                     "Registered a new resource type: '{0}'",
                     resourceType);
             }
-            if (needleCollection.ContainsKey(targetType))
+            if (geneCollection.ContainsKey(targetType))
             {
                 HandleMessage(
-                    "Replacing a needle registration for resource type '{0}' and member type '{1}': '{2}'",
+                    "Replacing a gene registration for resource type '{0}' and member type '{1}': '{2}'",
                     resourceType,
                     targetType.FullName,
-                    needle.GetType().FullName);
+                    gene.GetType().FullName);
             }
             else
             {
                 HandleMessage(
-                    "Registered a new needle for resource type '{0}' and member type '{1}': '{2}'",
+                    "Registered a new gene for resource type '{0}' and member type '{1}': '{2}'",
                     resourceType,
                     targetType.FullName,
-                    needle.GetType().FullName);
+                    gene.GetType().FullName);
             }
-            needleCollection[targetType] = needle;
+            geneCollection[targetType] = gene;
         }
 
-        public static void RegisterEventNeedle(Type targetType, IEventNeedle needle)
+        public static void RegisterEventGene(Type targetType, IEventGene gene)
         {
-            if (eventNeedles.ContainsKey(targetType))
+            if (eventGenes.ContainsKey(targetType))
             {
                 HandleMessage(
-                    "Replacing an event needle registration for view type '{0}': '{2}'",
+                    "Replacing an event gene registration for view type '{0}': '{2}'",
                     targetType.FullName,
-                    needle.GetType().FullName);
+                    gene.GetType().FullName);
             }
             else
             {
                 HandleMessage(
-                    "Registered a new event needle for view type '{1}': '{2}'",
+                    "Registered a new event gene for view type '{1}': '{2}'",
                     targetType.FullName,
-                    needle.GetType().FullName);
+                    gene.GetType().FullName);
             }
-            eventNeedles[targetType] = needle;
+            eventGenes[targetType] = gene;
         }
 
-        internal static void RegisterDefaultNeedles()
+        internal static void RegisterDefaultGenes()
         {
-            RegisterNeedle("id", typeof(Android.Views.View), new ViewNeedle());
+            RegisterGene("id", typeof(Android.Views.View), new ViewGene());
 
-            RegisterNeedle("anim", typeof(Android.Views.Animations.Animation), new AnimationNeedle());
-            RegisterNeedle("animator", typeof(Android.Animation.Animator), new AnimatorNeedle());
-            RegisterNeedle("bool", typeof(System.Boolean), new BooleanNeedle());
-            RegisterNeedle("drawable", typeof(Android.Graphics.Bitmap), new BitmapNeedle());
-            var colorNeedle = new ColorNeedle();
-            RegisterNeedle("color", typeof(Android.Graphics.Color), colorNeedle);
-            RegisterNeedle("color", typeof(System.Drawing.Color), colorNeedle);
-            RegisterNeedle("color", typeof(Android.Content.Res.ColorStateList), new ColorStateListNeedle());
-            RegisterNumberNeedle("dimen", new DimensionNeedle());
-            RegisterNeedle("drawable", typeof(Android.Graphics.Drawables.Drawable), new DrawableNeedle());
-            RegisterNumberNeedle("integer", new IntegerNeedle());
-            RegisterNeedle("string", typeof(System.String), new StringNeedle());
+            RegisterGene("anim", typeof(Android.Views.Animations.Animation), new AnimationGene());
+            RegisterGene("animator", typeof(Android.Animation.Animator), new AnimatorGene());
+            RegisterGene("bool", typeof(System.Boolean), new BooleanGene());
+            RegisterGene("drawable", typeof(Android.Graphics.Bitmap), new BitmapGene());
+            var colorGene = new ColorGene();
+            RegisterGene("color", typeof(Android.Graphics.Color), colorGene);
+            RegisterGene("color", typeof(System.Drawing.Color), colorGene);
+            RegisterGene("color", typeof(Android.Content.Res.ColorStateList), new ColorStateListGene());
+            RegisterNumberGene("dimen", new DimensionGene());
+            RegisterGene("drawable", typeof(Android.Graphics.Drawables.Drawable), new DrawableGene());
+            RegisterNumberGene("integer", new IntegerGene());
+            RegisterGene("string", typeof(System.String), new StringGene());
 
-            RegisterNeedle("array", typeof(System.Collections.Generic.IEnumerable<System.Int32>), new IntegerArrayNeedle());
-            RegisterNeedle("array", typeof(System.Collections.Generic.IEnumerable<System.String>), new StringArrayNeedle());
-            RegisterNeedle("array", typeof(Android.Content.Res.TypedArray), new TypedArrayNeedle());
+            RegisterGene("array", typeof(System.Collections.Generic.IEnumerable<System.Int32>), new IntegerArrayGene());
+            RegisterGene("array", typeof(System.Collections.Generic.IEnumerable<System.String>), new StringArrayGene());
+            RegisterGene("array", typeof(Android.Content.Res.TypedArray), new TypedArrayGene());
 
-            var xmlNeedle = new XmlNeedle();
-            RegisterNeedle("xml", typeof(System.Xml.XmlReader), xmlNeedle);
-            RegisterNeedle("xml", typeof(System.Xml.XmlDocument), xmlNeedle);
-            RegisterNeedle("xml", typeof(System.Xml.Linq.XDocument), xmlNeedle);
-            RegisterNeedle("xml", typeof(System.String), xmlNeedle);
+            var xmlGene = new XmlGene();
+            RegisterGene("xml", typeof(System.Xml.XmlReader), xmlGene);
+            RegisterGene("xml", typeof(System.Xml.XmlDocument), xmlGene);
+            RegisterGene("xml", typeof(System.Xml.Linq.XDocument), xmlGene);
+            RegisterGene("xml", typeof(System.String), xmlGene);
         }
 
-        internal static void RegisterNumberNeedle(string resourceType, INeedle needle)
+        internal static void RegisterNumberGene(string resourceType, IGene gene)
         {
-            RegisterNeedle(resourceType, typeof(System.Int16), needle);
-            RegisterNeedle(resourceType, typeof(System.Int32), needle);
-            RegisterNeedle(resourceType, typeof(System.Int64), needle);
-            RegisterNeedle(resourceType, typeof(System.UInt16), needle);
-            RegisterNeedle(resourceType, typeof(System.UInt32), needle);
-            RegisterNeedle(resourceType, typeof(System.UInt64), needle);
-            RegisterNeedle(resourceType, typeof(System.Byte), needle);
-            RegisterNeedle(resourceType, typeof(System.SByte), needle);
-            RegisterNeedle(resourceType, typeof(System.Single), needle);
-            RegisterNeedle(resourceType, typeof(System.Double), needle);
-            RegisterNeedle(resourceType, typeof(System.Decimal), needle);
+            RegisterGene(resourceType, typeof(System.Int16), gene);
+            RegisterGene(resourceType, typeof(System.Int32), gene);
+            RegisterGene(resourceType, typeof(System.Int64), gene);
+            RegisterGene(resourceType, typeof(System.UInt16), gene);
+            RegisterGene(resourceType, typeof(System.UInt32), gene);
+            RegisterGene(resourceType, typeof(System.UInt64), gene);
+            RegisterGene(resourceType, typeof(System.Byte), gene);
+            RegisterGene(resourceType, typeof(System.SByte), gene);
+            RegisterGene(resourceType, typeof(System.Single), gene);
+            RegisterGene(resourceType, typeof(System.Double), gene);
+            RegisterGene(resourceType, typeof(System.Decimal), gene);
         }
 
-        internal static void RegisterDefaultEventNeedles()
+        internal static void RegisterDefaultEventGenes()
         {
-            RegisterEventNeedle(typeof(Android.Views.View), new ViewEventNeedle());
+            RegisterEventGene(typeof(Android.Views.View), new ViewEventGene());
         }
 
         internal static void HandleError(string format, params object[] args)
@@ -454,20 +454,20 @@ namespace Syringe
 
         internal static void HandleError(Exception exception, string format, params object[] args)
         {
-            // make sure we don't multi-inject
+            // make sure we don't multi-splice
             if (Debug && DebugTextWriter != null)
             {
                 DebugTextWriter.WriteLine(format, args);
             }
             if (ThrowOnError)
             {
-                throw new InjectionException(string.Format(format, args), exception);
+                throw new SpliceException(string.Format(format, args), exception);
             }
         }
 
         internal static void HandleMessage(string format, params object[] args)
         {
-            // make sure we don't multi-inject
+            // make sure we don't multi-splice
             if (Debug && DebugTextWriter != null)
             {
                 DebugTextWriter.WriteLine(format, args);

@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("SyringeTests.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("GeneticsTests.Resource", IsApplication=true)]
 
-namespace SyringeTests
+namespace GeneticsTests
 {
 	
 	
@@ -26,28 +26,28 @@ namespace SyringeTests
 		
 		public static void UpdateIdValues()
 		{
-			global::Xamarin.Android.NUnitLite.Resource.Id.OptionHostName = global::SyringeTests.Resource.Id.OptionHostName;
-			global::Xamarin.Android.NUnitLite.Resource.Id.OptionPort = global::SyringeTests.Resource.Id.OptionPort;
-			global::Xamarin.Android.NUnitLite.Resource.Id.OptionRemoteServer = global::SyringeTests.Resource.Id.OptionRemoteServer;
-			global::Xamarin.Android.NUnitLite.Resource.Id.OptionsButton = global::SyringeTests.Resource.Id.OptionsButton;
-			global::Xamarin.Android.NUnitLite.Resource.Id.ResultFullName = global::SyringeTests.Resource.Id.ResultFullName;
-			global::Xamarin.Android.NUnitLite.Resource.Id.ResultMessage = global::SyringeTests.Resource.Id.ResultMessage;
-			global::Xamarin.Android.NUnitLite.Resource.Id.ResultResultState = global::SyringeTests.Resource.Id.ResultResultState;
-			global::Xamarin.Android.NUnitLite.Resource.Id.ResultRunSingleMethodTest = global::SyringeTests.Resource.Id.ResultRunSingleMethodTest;
-			global::Xamarin.Android.NUnitLite.Resource.Id.ResultStackTrace = global::SyringeTests.Resource.Id.ResultStackTrace;
-			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsFailed = global::SyringeTests.Resource.Id.ResultsFailed;
-			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsId = global::SyringeTests.Resource.Id.ResultsId;
-			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsIgnored = global::SyringeTests.Resource.Id.ResultsIgnored;
-			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsInconclusive = global::SyringeTests.Resource.Id.ResultsInconclusive;
-			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsMessage = global::SyringeTests.Resource.Id.ResultsMessage;
-			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsPassed = global::SyringeTests.Resource.Id.ResultsPassed;
-			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsResult = global::SyringeTests.Resource.Id.ResultsResult;
-			global::Xamarin.Android.NUnitLite.Resource.Id.RunTestsButton = global::SyringeTests.Resource.Id.RunTestsButton;
-			global::Xamarin.Android.NUnitLite.Resource.Id.TestSuiteListView = global::SyringeTests.Resource.Id.TestSuiteListView;
-			global::Xamarin.Android.NUnitLite.Resource.Layout.options = global::SyringeTests.Resource.Layout.options;
-			global::Xamarin.Android.NUnitLite.Resource.Layout.results = global::SyringeTests.Resource.Layout.results;
-			global::Xamarin.Android.NUnitLite.Resource.Layout.test_result = global::SyringeTests.Resource.Layout.test_result;
-			global::Xamarin.Android.NUnitLite.Resource.Layout.test_suite = global::SyringeTests.Resource.Layout.test_suite;
+			global::Xamarin.Android.NUnitLite.Resource.Id.OptionHostName = global::GeneticsTests.Resource.Id.OptionHostName;
+			global::Xamarin.Android.NUnitLite.Resource.Id.OptionPort = global::GeneticsTests.Resource.Id.OptionPort;
+			global::Xamarin.Android.NUnitLite.Resource.Id.OptionRemoteServer = global::GeneticsTests.Resource.Id.OptionRemoteServer;
+			global::Xamarin.Android.NUnitLite.Resource.Id.OptionsButton = global::GeneticsTests.Resource.Id.OptionsButton;
+			global::Xamarin.Android.NUnitLite.Resource.Id.ResultFullName = global::GeneticsTests.Resource.Id.ResultFullName;
+			global::Xamarin.Android.NUnitLite.Resource.Id.ResultMessage = global::GeneticsTests.Resource.Id.ResultMessage;
+			global::Xamarin.Android.NUnitLite.Resource.Id.ResultResultState = global::GeneticsTests.Resource.Id.ResultResultState;
+			global::Xamarin.Android.NUnitLite.Resource.Id.ResultRunSingleMethodTest = global::GeneticsTests.Resource.Id.ResultRunSingleMethodTest;
+			global::Xamarin.Android.NUnitLite.Resource.Id.ResultStackTrace = global::GeneticsTests.Resource.Id.ResultStackTrace;
+			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsFailed = global::GeneticsTests.Resource.Id.ResultsFailed;
+			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsId = global::GeneticsTests.Resource.Id.ResultsId;
+			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsIgnored = global::GeneticsTests.Resource.Id.ResultsIgnored;
+			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsInconclusive = global::GeneticsTests.Resource.Id.ResultsInconclusive;
+			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsMessage = global::GeneticsTests.Resource.Id.ResultsMessage;
+			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsPassed = global::GeneticsTests.Resource.Id.ResultsPassed;
+			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsResult = global::GeneticsTests.Resource.Id.ResultsResult;
+			global::Xamarin.Android.NUnitLite.Resource.Id.RunTestsButton = global::GeneticsTests.Resource.Id.RunTestsButton;
+			global::Xamarin.Android.NUnitLite.Resource.Id.TestSuiteListView = global::GeneticsTests.Resource.Id.TestSuiteListView;
+			global::Xamarin.Android.NUnitLite.Resource.Layout.options = global::GeneticsTests.Resource.Layout.options;
+			global::Xamarin.Android.NUnitLite.Resource.Layout.results = global::GeneticsTests.Resource.Layout.results;
+			global::Xamarin.Android.NUnitLite.Resource.Layout.test_result = global::GeneticsTests.Resource.Layout.test_result;
+			global::Xamarin.Android.NUnitLite.Resource.Layout.test_suite = global::GeneticsTests.Resource.Layout.test_suite;
 		}
 		
 		public partial class Animation

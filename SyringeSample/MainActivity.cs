@@ -6,26 +6,26 @@ using Android.OS;
 using Android.Views;
 using Android.Views.Animations;
 
-using Syringe;
-using Syringe.Attributes;
+using Genetics;
+using Genetics.Attributes;
 
-namespace SyringeSample
+namespace GeneticsSample
 {
-    [Activity(Label = "SyringeSample", MainLauncher = true, Icon = "@drawable/icon", Theme = "@android:style/Theme.DeviceDefault.NoActionBar")]
+    [Activity(Label = "GeneticsSample", MainLauncher = true, Icon = "@drawable/icon", Theme = "@android:style/Theme.DeviceDefault.NoActionBar")]
     public class MainActivity : Activity
     {
-		// view injection fields
-		[Inject(Resource.Id.title)] private TextView title;
-		[Inject(Resource.Id.subtitle)] private TextView subtitle;
-		[Inject(Resource.Id.hello)]  private Button hello;
-		[Inject(Resource.Id.listview)]  private ListView listview;
-		[Inject(Resource.Id.footer)]  private TextView footer;
+		// view splice fields
+		[Splice(Resource.Id.title)] private TextView title;
+		[Splice(Resource.Id.subtitle)] private TextView subtitle;
+		[Splice(Resource.Id.hello)]  private Button hello;
+		[Splice(Resource.Id.listview)]  private ListView listview;
+		[Splice(Resource.Id.footer)]  private TextView footer;
 
-        // resource injection fields
-        [Inject(Resource.String.titleText)] private string titleText;
-        [Inject(Resource.String.subtitleText)] private string subtitleText;
-        [Inject(Resource.String.sayHelloText)] private string sayHelloText;
-        [Inject(Resource.String.authorText)] private string authorText;
+        // resource splice fields
+        [Splice(Resource.String.titleText)] private string titleText;
+        [Splice(Resource.String.subtitleText)] private string subtitleText;
+        [Splice(Resource.String.sayHelloText)] private string sayHelloText;
+        [Splice(Resource.String.authorText)] private string authorText;
 
         // normal fields
         private SimpleAdapter adapter;
@@ -33,7 +33,7 @@ namespace SyringeSample
 
         public MainActivity()
         {
-            Needle.Debug = true;
+            Geneticist.Debug = true;
         }
 
         protected override void OnCreate(Bundle bundle)
@@ -42,8 +42,8 @@ namespace SyringeSample
 
             SetContentView(Resource.Layout.Main);
 
-            // inject the views into the fields
-            Needle.Inject(this);
+            // splice the views into the fields
+            Geneticist.Splice(this);
 
             // Contrived code to use the bound fields.
             title.Text = titleText;
@@ -57,7 +57,7 @@ namespace SyringeSample
             listview.Adapter = adapter;
         }
 
-        [InjectClick(Resource.Id.hello)]
+        [SpliceClick(Resource.Id.hello)]
         private void OnSayHello(object sender, EventArgs e)
         {
             Toast.MakeText(this, "Hello, views!", ToastLength.Short).Show();
@@ -73,14 +73,14 @@ namespace SyringeSample
             }
         }
 
-        [InjectLongClick(Resource.Id.hello)]
+        [SpliceLongClick(Resource.Id.hello)]
         private void OnSayGetOffMe(object sender, View.LongClickEventArgs e)
         {
             Toast.MakeText(this, "Let go of me!", ToastLength.Short).Show();
             e.Handled = true;
         }
 
-        [InjectItemClick(Resource.Id.listview)]
+        [SpliceItemClick(Resource.Id.listview)]
         private void OnItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
             Toast.MakeText(this, "You clicked: " + adapter[e.Position], ToastLength.Short).Show();

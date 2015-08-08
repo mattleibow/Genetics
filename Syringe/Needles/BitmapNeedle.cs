@@ -11,14 +11,14 @@ using Android.Views;
 using Android.Views.Animations;
 using Org.XmlPull.V1;
 
-using Syringe.Mappings;
+using Genetics.Mappings;
 
-namespace Syringe.Needles
+namespace Genetics.Genes
 {
 
-    public class BitmapNeedle : INeedle
+    public class BitmapGene : IGene
     {
-        public bool Inject(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
+        public bool Splice(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
         {
             Bitmap bitmap = null;
             try
@@ -31,9 +31,9 @@ namespace Syringe.Needles
                 DisposeBitmap(bitmap);
                 bitmap = null;
 
-                Needle.HandleError(
+                Geneticist.HandleError(
                     exception,
-                    "Unable to inject resource '{0}' with id '{1}' to member '{2}'.",
+                    "Unable to splice resource '{0}' with id '{1}' to member '{2}'.",
                     context.Resources.GetResourceName(resourceId),
                     resourceId,
                     memberMapping.Member.Name);
@@ -41,9 +41,9 @@ namespace Syringe.Needles
             return bitmap != null;
         }
 
-        public void Withdraw(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
+        public void Sever(object target, object source, string resourceType, int resourceId, Context context, MemberMapping memberMapping)
         {
-            if (memberMapping.Attribute.DisposeOnWithdraw)
+            if (memberMapping.Attribute.DisposeOnSever)
             {
                 var bitmap = memberMapping.GetterMethod(target) as Bitmap;
                 DisposeBitmap(bitmap);

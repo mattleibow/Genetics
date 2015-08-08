@@ -1,22 +1,22 @@
 using System;
 
-namespace Syringe
+namespace Genetics
 {
-    public class InjectionException : Exception
+    public class SpliceException : Exception
     {
-        public InjectionException()
+        public SpliceException()
             : base()
         {
 
         }
 
-        public InjectionException(string message)
+        public SpliceException(string message)
             : base(message)
         {
 
         }
 
-        public InjectionException(string message, Exception innerException)
+        public SpliceException(string message, Exception innerException)
             : base(message, innerException)
         {
 

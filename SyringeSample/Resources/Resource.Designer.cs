@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("SyringeSample.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("GeneticsSample.Resource", IsApplication=true)]
 
-namespace SyringeSample
+namespace GeneticsSample
 {
 	
 	

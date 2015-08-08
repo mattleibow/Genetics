@@ -5,20 +5,20 @@ using Android.Views.Animations;
 using Android.Animation;
 using NUnit.Framework;
 
-using Syringe;
-using SyringeTests.TestCases;
+using Genetics;
+using GeneticsTests.TestCases;
 
-namespace SyringeTests
+namespace GeneticsTests
 {
     [TestFixture]
-    public class ResourceInjectionTests
+    public class ResourceSpliceTests
     {
         [SetUp]
         public void Setup()
         {
-            Needle.Debug = true;
-            Needle.DebugTextWriter = Console.Out;
-            Needle.ThrowOnError = true;
+            Geneticist.Debug = true;
+            Geneticist.DebugTextWriter = Console.Out;
+            Geneticist.ThrowOnError = true;
         }
 
         [TearDown]
@@ -29,16 +29,16 @@ namespace SyringeTests
         [Test]
         public void TypeMappingCreatedForAllSupportedMembers()
         {
-            var mapping = Needle.GetTypeMapping(typeof(SimpleTargetObject));
+            var mapping = Geneticist.GetTypeMapping(typeof(SimpleTargetObject));
             Assert.AreEqual(7, mapping.Members.Values.Count);
 
-            mapping = Needle.GetTypeMapping(typeof(AnimationsTargetObject));
+            mapping = Geneticist.GetTypeMapping(typeof(AnimationsTargetObject));
             Assert.AreEqual(2, mapping.Members.Values.Count);
 
-            mapping = Needle.GetTypeMapping(typeof(DrawableTargetObject));
+            mapping = Geneticist.GetTypeMapping(typeof(DrawableTargetObject));
             Assert.AreEqual(3, mapping.Members.Values.Count);
 
-            mapping = Needle.GetTypeMapping(typeof(XmlTargetObject));
+            mapping = Geneticist.GetTypeMapping(typeof(XmlTargetObject));
             Assert.AreEqual(4, mapping.Members.Values.Count);
         }
 
@@ -46,7 +46,7 @@ namespace SyringeTests
         public void AllSupportedMembersAreBound()
         {
             var target = new SimpleTargetObject();
-            Needle.Inject(target, null, Application.Context);
+            Geneticist.Splice(target, null, Application.Context);
 
             Assert.IsTrue(target.BooleanProperty);
 
@@ -71,7 +71,7 @@ namespace SyringeTests
         public void AllSupportedAnimationMembersAreBound()
         {
             var target = new AnimationsTargetObject();
-            Needle.Inject(target, null, Application.Context);
+            Geneticist.Splice(target, null, Application.Context);
 
             var animation = target.AnimationProperty;
             Assert.IsTrue(animation is AnimationSet);
@@ -97,7 +97,7 @@ namespace SyringeTests
         {
             var density = Application.Context.Resources.DisplayMetrics.Density;
             var target = new DrawableTargetObject();
-            Needle.Inject(target, null, Application.Context);
+            Geneticist.Splice(target, null, Application.Context);
 
             var bitmap = target.BitmapProperty;
             Assert.IsNotNull(bitmap);
@@ -119,7 +119,7 @@ namespace SyringeTests
         public void AllSupportedXmlMembersAreBound()
         {
             var target = new XmlTargetObject();
-            Needle.Inject(target, null, Application.Context);
+            Geneticist.Splice(target, null, Application.Context);
 
             var xmlReader = target.XmlReaderResource;
             Assert.IsNotNull(xmlReader);
