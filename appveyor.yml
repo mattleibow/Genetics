@@ -4,6 +4,10 @@ configuration: Release
 platform: Any CPU
 environment:
   LibraryVersion: 1.0.0
+  XamarinEmail:
+    secure: +SUXZSPLHwp39+Yh09d2xxVGsEgHtlSD4NT1Og5h3sg=
+  XamarinPassword:
+    secure: Tvdf5rZl6IOCwZbvyj9B2w==
   
 # versioning
 version: $(LibraryVersion).{build}
@@ -19,10 +23,13 @@ branches:
   only:
     - master
 before_build:
+  - appveyor RegisterXamarinLicense -Email %XamarinEmail% -Password %XamarinPassword% -Product Android
   - nuget restore Genetics.sln
 build: 
   project: Genetics.sln 
   verbosity: normal
+on_finish:
+  - appveyor UnregisterXamarinLicense -Email %XamarinEmail% -Password %XamarinPassword%
 
 # artifacts
 artifacts: 
