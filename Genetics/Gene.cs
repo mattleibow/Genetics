@@ -119,7 +119,7 @@ namespace Genetics
 
         private static void ProcessMemberMapping(object target, object source, Context context, MemberMapping memberMapping)
         {
-            var memberSpliceed = false;
+            var memberSpliced = false;
             var attr = memberMapping.Attribute;
             var memberType = memberMapping.MemberType;
             var resourceId = attr.ResourceId;
@@ -128,11 +128,11 @@ namespace Genetics
             var gene = GetGene(resourceType, memberMapping);
             if (gene != null)
             {
-                memberSpliceed = gene.Splice(target, source, resourceType, resourceId, context, memberMapping);
-                if (memberSpliceed)
+                memberSpliced = gene.Splice(target, source, resourceType, resourceId, context, memberMapping);
+                if (memberSpliced)
                 {
                     HandleMessage(
-                        "Spliceed resource '{0}' with id '{1}' to member '{2}'.",
+                        "Spliced resource '{0}' with id '{1}' to member '{2}'.",
                         context.Resources.GetResourceName(resourceId),
                         resourceId,
                         memberMapping.Member.Name);
@@ -168,7 +168,7 @@ namespace Genetics
 
         private static void ProcessMethodMapping(object target, object source, Context context, MethodMapping methodMapping)
         {
-            var methodSpliceed = false;
+            var methodSpliced = false;
             var attr = methodMapping.Attribute;
             var view = GeneticsExtensions.FindViewById(source, attr.ViewId);
 
@@ -177,12 +177,12 @@ namespace Genetics
                 var gene = GetEventGene(view.GetType(), methodMapping);
                 if (gene != null)
                 {
-                    methodSpliceed = gene.Splice(target, source, view, context, methodMapping);
+                    methodSpliced = gene.Splice(target, source, view, context, methodMapping);
 
-                    if (methodSpliceed)
+                    if (methodSpliced)
                     {
                         HandleMessage(
-                            "Spliceed handler for event '{0}' on view with id '{1}' for method '{2}'.",
+                            "Spliced handler for event '{0}' on view with id '{1}' for method '{2}'.",
                             attr.EventName,
                             context.Resources.GetResourceName(attr.ViewId),
                             methodMapping.Method.Name);

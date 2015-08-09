@@ -41,34 +41,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventNeedles\IEventNeedle.cs" />
-    <Compile Include="EventNeedles\ViewEventNeedle.cs" />
-    <Compile Include="Attributes\InjectEventAttribute.cs" />
-    <Compile Include="InjectionException.cs" />
+    <Compile Include="EventGenes\IEventGene.cs" />
+    <Compile Include="EventGenes\ViewEventGene.cs" />
+    <Compile Include="Attributes\SpliceEventAttribute.cs" />
+    <Compile Include="SpliceException.cs" />
     <Compile Include="Mappings\MethodMapping.cs" />
     <Compile Include="Mappings\TypeMapping.cs" />
     <Compile Include="Mappings\MemberMapping.cs" />
-    <Compile Include="Needles\IntegerArrayNeedle.cs" />
-    <Compile Include="SyringeExtensions.cs" />
-    <Compile Include="Needle.cs" />
-    <Compile Include="Attributes\InjectAttribute.cs" />
+    <Compile Include="Genes\IntegerArrayGene.cs" />
+    <Compile Include="GeneticsExtensions.cs" />
+    <Compile Include="Gene.cs" />
+    <Compile Include="Attributes\SpliceAttribute.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Needles\INeedle.cs" />
-    <Compile Include="Needles\AnimatorNeedle.cs" />
-    <Compile Include="Needles\AnimationNeedle.cs" />
-    <Compile Include="Needles\BitmapNeedle.cs" />
-    <Compile Include="Needles\DrawableNeedle.cs" />
-    <Compile Include="Needles\ColorStateListNeedle.cs" />
-    <Compile Include="Needles\ColorNeedle.cs" />
-    <Compile Include="Needles\IntegerNeedle.cs" />
-    <Compile Include="Needles\DimensionNeedle.cs" />
-    <Compile Include="Needles\BooleanNeedle.cs" />
-    <Compile Include="Needles\StringNeedle.cs" />
-    <Compile Include="Needles\SimpleResourceNeedle.cs" />
-    <Compile Include="Needles\XmlNeedle.cs" />
-    <Compile Include="Needles\ViewNeedle.cs" />
-    <Compile Include="Needles\TypedArrayNeedle.cs" />
+    <Compile Include="Genes\IGene.cs" />
+    <Compile Include="Genes\AnimatorGene.cs" />
+    <Compile Include="Genes\AnimationGene.cs" />
+    <Compile Include="Genes\BitmapGene.cs" />
+    <Compile Include="Genes\DrawableGene.cs" />
+    <Compile Include="Genes\ColorStateListGene.cs" />
+    <Compile Include="Genes\ColorGene.cs" />
+    <Compile Include="Genes\IntegerGene.cs" />
+    <Compile Include="Genes\DimensionGene.cs" />
+    <Compile Include="Genes\BooleanGene.cs" />
+    <Compile Include="Genes\StringGene.cs" />
+    <Compile Include="Genes\SimpleResourceGene.cs" />
+    <Compile Include="Genes\XmlGene.cs" />
+    <Compile Include="Genes\ViewGene.cs" />
+    <Compile Include="Genes\TypedArrayGene.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

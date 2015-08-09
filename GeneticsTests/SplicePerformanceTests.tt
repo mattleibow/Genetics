@@ -34,14 +34,14 @@ namespace GeneticsTests
     [TestFixture]
     public class SplicePerformanceTests
     {
-        private const int AllowableOverhead = 100;
+        private const int AllowableOverhead = 250;
 
         [SetUp]
         public void Setup()
         {
-            Needle.Debug = true;
-            Needle.DebugTextWriter = Console.Out;
-            Needle.ThrowOnError = true;
+            Geneticist.Debug = false;
+            Geneticist.DebugTextWriter = null;
+            Geneticist.ThrowOnError = true;
         }
 
         [TearDown]
@@ -113,7 +113,7 @@ namespace GeneticsTests
 <# foreach (var resourceType in resourceTypes)
    {#>
             {
-                var mapping = Needle.GetTypeMapping(typeof(<#= resourceType.Type #>PerformanceTestCase));
+                var mapping = Geneticist.GetTypeMapping(typeof(<#= resourceType.Type #>PerformanceTestCase));
                 Assert.AreEqual(<#= PerformanceTestNumber #>, mapping.Members.Values.Count, "<#= resourceType.Type #> Performance Test Case");
             }
 <# } #>
@@ -128,18 +128,18 @@ namespace GeneticsTests
             var manual = new <#= resourceType.Type #>PerformanceTestCase();
             manual.SpliceManually();
             manualTimer.Stop();
-            var manualTicks = manualTimer.ElapsedTicks;
+            var manualMilliseconds = manualTimer.ElapsedMilliseconds;
             
             var automaticTimer = Stopwatch.StartNew();
             var automatic = new <#= resourceType.Type #>PerformanceTestCase();
             automatic.SpliceAutomatically();
             automaticTimer.Stop();
-            var automaticTicks = manualTimer.ElapsedTicks;
+            var automaticMilliseconds = automaticTimer.ElapsedMilliseconds;
 
             manual.AssertNotDefault();
             automatic.AssertNotDefault();
 
-            Assert.IsTrue(Math.Abs(automaticTicks - manualTicks) < AllowableOverhead);
+            Assert.IsTrue(Math.Abs(automaticMilliseconds - manualMilliseconds) < AllowableOverhead, "The difference {0}ms was greater than expected {1}ms.", Math.Abs(automaticMilliseconds - manualMilliseconds), AllowableOverhead);
         }
 
 <# } #>
@@ -147,7 +147,7 @@ namespace GeneticsTests
 }
 
 <#+
-    const int PerformanceTestNumber = 100;
+    const int PerformanceTestNumber = 1000;
 
     class ResourceType
     {

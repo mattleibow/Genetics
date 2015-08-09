@@ -42,7 +42,7 @@ namespace GeneticsTests
         }
 
         [Test]
-        public void SimpleArraySpliceed()
+        public void SimpleArraySpliced()
         {
             var target = new ArraysTargetObject();
             Geneticist.Splice(target, null, Application.Context);
@@ -61,7 +61,7 @@ namespace GeneticsTests
         }
 
         [Test]
-        public void VariousCollectionTypesSpliceed()
+        public void VariousCollectionTypesSpliced()
         {
             var target = new ArrayTypeTargetObject();
             Geneticist.Splice(target, null, Application.Context);
@@ -88,7 +88,7 @@ namespace GeneticsTests
         }
 
         [Test]
-        public void TypedArraySpliceed()
+        public void TypedArraySpliced()
         {
             var target = new ArraysTargetObject();
             Geneticist.Splice(target, null, Application.Context);
