@@ -83,5 +83,24 @@ namespace GeneticsTests
             Assert.Throws<ArgumentException>(() => { drawable.GetState(); });
             Assert.Throws<ArgumentException>(() => { bitmapDrawable.GetState(); });
         }
+
+        [Test]
+        public void ExactMatchMembersAreSevered()
+        {
+            var view = ViewSpliceTests.CreateView(Resource.Layout.SimpleLayout);
+
+            var target = new ExactEventSpliceTargetObject();
+            Geneticist.Splice(target, view, Application.Context);
+            var button = view.FindViewById(Resource.Id.simpleButton);
+
+            var ex = Assert.Throws<NotImplementedException>(() =>
+            {
+                button.CallOnClick();
+            });
+            Assert.AreEqual("ExactParametersMethod", ex.Message);
+
+            Geneticist.Sever(target, view, Application.Context);
+            button.CallOnClick();
+        }
     }
 }
