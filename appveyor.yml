@@ -1,0 +1,33 @@
+# build variables
+os: Visual Studio 2015
+configuration: Release
+platform: Any CPU
+environment:
+  LibraryVersion: 1.0.0
+  
+# versioning
+version: $(LibraryVersion).{build}
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: $(LibraryVersion).0
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}-{branch}'
+
+# build
+branches:
+  only:
+    - master
+before_build:
+  - nuget restore Genetics.sln
+build: 
+  project: Genetics.sln 
+  verbosity: normal
+
+# artifacts
+artifacts: 
+  - path: Genetics\bin\Release\
+    name: Genetics-$(APPVEYOR_BUILD_VERSION) 
+    type: zip 
+  - path: Genetics*.nupkg
+  - path: Genetics*.xam

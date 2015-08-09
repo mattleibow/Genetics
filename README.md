@@ -1,23 +1,23 @@
-# Syringe
+# Genetics
 
-Syringe allows attributes to be used to describe how to inject resources, views and events into an object. Based on the resource ID provided, it can inject the appropriate Android `View` or Android resource. Or, it can automatically attach event handlers to `View` events.
+Genetics allows attributes to be used to describe how to inject resources, views and events into an object. Based on the resource ID provided, it can inject the appropriate Android `View` or Android resource. Or, it can automatically attach event handlers to `View` events.
 
- * Use `[Inject]` on fields and properties instead of `FindViewById` method calls.
- * Use `[Inject]` on fields and properties instead of `GetString` or `GetDrawable` method calls.
- * Use `[InjectEvent]`,  or others like `[InjectClick]`, on methods instead of attaching delegates to events.
+ * Use `[Splice]` on fields and properties instead of `FindViewById` method calls.
+ * Use `[Splice]` on fields and properties instead of `GetString` or `GetDrawable` method calls.
+ * Use `[SpliceEvent]`,  or others like `[SpliceClick]`, on methods instead of attaching delegates to events.
 
 ```csharp
 public class MyActivity : Activity
 {
-  [Inject(Resource.Id.username)]
+  [Splice(Resource.Id.username)]
   private EditText username;
-  [Inject(Resource.Id.password)]
+  [Splice(Resource.Id.password)]
   private EditText password;
-  [Inject(Resource.String.loginError)]
+  [Splice(Resource.String.loginError)]
   private string loginErrorMessage;
 
-  [InjectClick(Resource.Id.login)]
-  private void LoginClicked()
+  [SpliceClick(Resource.Id.login)]
+  private void LoginClicked(object sender, EventArgs e)
   {
     // TODO: perform login...
   }
@@ -29,18 +29,26 @@ public class MyActivity : Activity
     // load the view layout
     SetContentView(Resource.Layout.MyActivityLayout);
     // inject the views
-    Needle.Inject(this);
+    Geneticist.Splice(this);
     
     // TODO: use fields...
+  }
+  
+  protected override void OnDestroy()
+  {
+    // dispose of events and resources
+    Geneticist.Sever(this);
+
+    base.OnDestroy();
   }
 }
 ```
 
 ## Download
 
-Syringe can be downloaded as a [Xamarin Component][1] or as a [NuGet][1]:
+Genetics can be downloaded as a [Xamarin Component][1] or as a [NuGet][2]:
 ```batch
-Install-Package Syringe
+Install-Package Genetics
 ```
 
 ## License
@@ -60,4 +68,5 @@ Install-Package Syringe
     limitations under the License.
 
 
- [1]: http://www.nuget.org/packages/syringe
+ [1]: http://components.xamarin.com/view/genetics
+ [2]: http://www.nuget.org/packages/genetics
