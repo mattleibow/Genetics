@@ -85,7 +85,7 @@ namespace GeneticsTests
         //    Assert.AreSame(target.ToolbarNativeButSupportProperty, target.ToolbarSupportAndSupportProperty);
         //}
 
-        private static View CreateView(int layout)
+        public static View CreateView(int layout)
         {
             var activity = GeneticsTestsApplication.CurrentActivity;
             var parent = (ViewGroup)activity.FindViewById(Android.Resource.Id.Content);

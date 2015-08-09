@@ -6,8 +6,8 @@ namespace Genetics.EventGenes
 {
     public interface IEventGene
     {
-        bool Splice(object target, object source, View view, Context context, MethodMapping methodMapping);
+        bool Splice(object target, object source, View view, int viewId, Context context, MethodMapping methodMapping);
 
-        void Sever(object target, object source, View view, Context context, MethodMapping methodMapping);
+        void Sever(object target, object source, View view, int viewId, Context context, MethodMapping methodMapping);
     }
 }

@@ -9,14 +9,19 @@ namespace Genetics.EventGenes
 {
     public class ViewEventGene : IEventGene
     {
-        public virtual bool Splice(object target, object source, View view, Context context, MethodMapping methodMapping)
+        public virtual bool Splice(object target, object source, View view, int viewId, Context context, MethodMapping methodMapping)
         {
             return AttachDelegate(target, view, methodMapping);
         }
 
-        public virtual void Sever(object target, object source, View view, Context context, MethodMapping methodMapping)
+        public virtual void Sever(object target, object source, View view, int viewId, Context context, MethodMapping methodMapping)
         {
-            DetachDelegate(target, view, methodMapping);
+            // the view may have been disposed, 
+            // thus we don't need to detach
+            if (view != null)
+            {
+                DetachDelegate(target, view, methodMapping);
+            }
         }
 
         protected bool AttachDelegate(object target, View view, MethodMapping methodMapping)

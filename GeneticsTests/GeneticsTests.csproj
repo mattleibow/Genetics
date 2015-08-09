@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrayResourceSpliceTests.cs" />
+    <Compile Include="ResourceSeverTests.cs" />
     <Compile Include="SplicePerformanceTests.cs">
       <DependentUpon>SplicePerformanceTests.tt</DependentUpon>
       <AutoGen>True</AutoGen>

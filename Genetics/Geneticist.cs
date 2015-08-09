@@ -123,6 +123,7 @@ namespace Genetics
             var attr = memberMapping.Attribute;
             var memberType = memberMapping.MemberType;
             var resourceId = attr.ResourceId;
+            // we delay the reading of the context to as late as possible
             var resourceType = context.Resources.GetResourceTypeName(resourceId);
 
             var gene = GetGene(resourceType, memberMapping);
@@ -170,6 +171,7 @@ namespace Genetics
         {
             var methodSpliced = false;
             var attr = methodMapping.Attribute;
+            // we delay the finding of the view to as late as possible
             var view = GeneticsExtensions.FindViewById(source, attr.ViewId);
 
             if (view != null)
@@ -177,7 +179,7 @@ namespace Genetics
                 var gene = GetEventGene(view.GetType(), methodMapping);
                 if (gene != null)
                 {
-                    methodSpliced = gene.Splice(target, source, view, context, methodMapping);
+                    methodSpliced = gene.Splice(target, source, view, attr.ViewId, context, methodMapping);
 
                     if (methodSpliced)
                     {
@@ -225,22 +227,137 @@ namespace Genetics
             }
         }
 
-        public static void Sever(object target)
+        public static void Sever(Activity target)
         {
-            //Class <?> targetClass = target.getClass();
-            //try
-            //{
-            //    if (debug) Log.d(TAG, "Looking up view gene for " + targetClass.getName());
-            //    ViewGene<Object> viewGene = findViewGeneForClass(targetClass);
-            //    if (viewGene != null)
-            //    {
-            //        viewGene.unsplice(target);
-            //    }
-            //}
-            //catch (Exception e)
-            //{
-            //    throw new RuntimeException("Unable to unsplice views for " + targetClass.getName(), e);
-            //}
+            Sever(target, target);
+        }
+
+        public static void Sever(View target)
+        {
+            Sever(target, target);
+        }
+
+        public static void Sever(Dialog target)
+        {
+            Sever(target, target);
+        }
+
+        public static void Sever(object target, Context context)
+        {
+            Sever(target, target, (src) => context);
+        }
+
+        public static void Sever(object target, Activity source)
+        {
+            Sever(target, source, (src) => src);
+        }
+
+        public static void Sever(object target, View source)
+        {
+            Sever(target, source, (src) => src.Context);
+        }
+
+        public static void Sever(object target, Dialog source)
+        {
+            Sever(target, source, (src) => src.Context);
+        }
+
+        public static void Sever(object target, object source, Context context)
+        {
+            Sever(target, source, (src) => context);
+        }
+
+        public static void Sever<T>(object target, T source, Func<T, Context> getContext)
+        {
+            Context context = null;
+
+            var typeMapping = GetTypeMapping(target.GetType());
+            if (typeMapping != null && typeMapping.Members.Count > 0)
+            {
+                if (context == null)
+                {
+                    context = getContext(source);
+                }
+                foreach (var memberMapping in typeMapping.Members.Values)
+                {
+                    SeverMemberMapping(target, source, context, memberMapping);
+                }
+            }
+
+            if (typeMapping != null && typeMapping.Methods.Count > 0)
+            {
+                if (context == null)
+                {
+                    context = getContext(source);
+                }
+                foreach (var methodMapping in typeMapping.Methods.Values)
+                {
+                    SeverMethodMapping(target, source, context, methodMapping);
+                }
+            }
+        }
+
+        private static void SeverMemberMapping(object target, object source, Context context, MemberMapping memberMapping)
+        {
+            var attr = memberMapping.Attribute;
+            var memberType = memberMapping.MemberType;
+            var resourceId = attr.ResourceId;
+            // we delay the reading of the context to as late as possible
+            var resourceType = context.Resources.GetResourceTypeName(resourceId);
+
+            var gene = GetGene(resourceType, memberMapping);
+            if (gene != null)
+            {
+                gene.Sever(target, source, resourceType, resourceId, context, memberMapping);
+                HandleMessage(
+                    "Severed resource '{0}' with id '{1}' to member '{2}'.",
+                    context.Resources.GetResourceName(resourceId),
+                    resourceId,
+                    memberMapping.Member.Name);
+            }
+            else
+            {
+                HandleError(
+                    "No member gene found for resource type '{0}' and member type '{1}'.",
+                    resourceType,
+                    memberMapping.MemberType.FullName);
+            }
+        }
+
+        private static void SeverMethodMapping(object target, object source, Context context, MethodMapping methodMapping)
+        {
+            var attr = methodMapping.Attribute;
+            // we delay the finding of the view to as late as possible
+            var view = GeneticsExtensions.FindViewById(source, attr.ViewId);
+
+            if (view != null)
+            {
+                var gene = GetEventGene(view.GetType(), methodMapping);
+                if (gene != null)
+                {
+                    gene.Sever(target, source, view, attr.ViewId, context, methodMapping);
+                    HandleMessage(
+                        "Spliced handler for event '{0}' on view with id '{1}' for method '{2}'.",
+                        attr.EventName,
+                        context.Resources.GetResourceName(attr.ViewId),
+                        methodMapping.Method.Name);
+                }
+                else
+                {
+                    HandleError(
+                        "No event gene found for event '{0}' on view with id '{1}' for method '{2}'.",
+                        attr.EventName,
+                        context.Resources.GetResourceName(attr.ViewId),
+                        methodMapping.Method.Name);
+                }
+            }
+            else
+            {
+                HandleMessage(
+                    "No view found with id '{0}' for method '{1}'.",
+                    context.Resources.GetResourceName(attr.ViewId),
+                    methodMapping.Method.Name);
+            }
         }
 
         private static object CreateCollection(Type collectionType, Type specifiedType)

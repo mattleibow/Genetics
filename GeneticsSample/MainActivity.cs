@@ -57,6 +57,13 @@ namespace GeneticsSample
             listview.Adapter = adapter;
         }
 
+        protected override void OnDestroy()
+        {
+            Geneticist.Sever(this);
+
+            base.OnDestroy();
+        }
+
         [SpliceClick(Resource.Id.hello)]
         private void OnSayHello(object sender, EventArgs e)
         {
