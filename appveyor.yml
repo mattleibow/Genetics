@@ -51,9 +51,10 @@ test_script:
         --user $env:XamarinEmail `
         --assembly-dir GeneticsUITests\bin\$env:configuration `
         --nunit-xml GeneticsUITests.Results.xml
+      $testResult = $LastExitCode;
       
       Write-Host "Uploading the test results...";
-      If ($LastExitCode -ne 0 -and $LastExitCode -ne 19)
+      If ($testResult -ne 0 -and $testResult -ne 19)
       {
         exit $LastExitCode;
       }
@@ -61,6 +62,8 @@ test_script:
       $wc = (New-Object 'System.Net.WebClient'); 
       $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", $path); 
       Write-Host "Done.";
+      
+      exit $testResult;
   
 # artifacts
 artifacts: 
