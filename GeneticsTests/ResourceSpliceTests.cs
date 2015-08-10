@@ -11,21 +11,8 @@ using GeneticsTests.TestCases;
 namespace GeneticsTests
 {
     [TestFixture]
-    public class ResourceSpliceTests
+    public class ResourceSpliceTests : TestBase
     {
-        [SetUp]
-        public void Setup()
-        {
-            Geneticist.Debug = true;
-            Geneticist.DebugTextWriter = Console.Out;
-            Geneticist.ThrowOnError = true;
-        }
-
-        [TearDown]
-        public void Tear()
-        {
-        }
-
         [Test]
         public void TypeMappingCreatedForAllSupportedMembers()
         {

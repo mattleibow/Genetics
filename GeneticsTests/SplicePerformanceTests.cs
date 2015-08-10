@@ -20,21 +20,18 @@ using GeneticsTests.TestCases;
 namespace GeneticsTests
 {
     [TestFixture]
-    public class SplicePerformanceTests
-    {
+    public class SplicePerformanceTests : TestBase
+    { 
         private const int AllowableOverhead = 250;
 
         [SetUp]
-        public void Setup()
+        public override void Setup()
         {
+            base.Setup();
+
             Geneticist.Debug = false;
             Geneticist.DebugTextWriter = null;
             Geneticist.ThrowOnError = true;
-        }
-
-        [TearDown]
-        public void Tear()
-        {
         }
 
         public class AnimationPerformanceTestCase

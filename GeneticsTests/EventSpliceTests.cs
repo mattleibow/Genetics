@@ -10,21 +10,8 @@ using System.Linq;
 namespace GeneticsTests
 {
     [TestFixture]
-    public class EventSpliceTests
+    public class EventSpliceTests : TestBase
     {
-        [SetUp]
-        public void Setup()
-        {
-            Geneticist.Debug = true;
-            Geneticist.DebugTextWriter = Console.Out;
-            Geneticist.ThrowOnError = true;
-        }
-
-        [TearDown]
-        public void Tear()
-        {
-        }
-
         [Test]
         public void TypeMappingCreatedForAllSupportedMembers()
 		{

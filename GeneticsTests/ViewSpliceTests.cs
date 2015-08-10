@@ -9,21 +9,8 @@ using GeneticsTests.TestCases;
 namespace GeneticsTests
 {
     [TestFixture]
-    public class ViewSpliceTests
+    public class ViewSpliceTests : TestBase
     {
-        [SetUp]
-        public void Setup()
-        {
-            Geneticist.Debug = true;
-            Geneticist.DebugTextWriter = Console.Out;
-            Geneticist.ThrowOnError = true;
-        }
-
-        [TearDown]
-        public void Tear()
-        {
-        }
-
         [Test]
         public void TypeMappingCreatedForAllSupportedMembers()
 		{

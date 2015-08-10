@@ -9,21 +9,8 @@ using GeneticsTests.TestCases;
 namespace GeneticsTests
 {
     [TestFixture]
-    public class EnumerableMappingTests
-    {
-        [SetUp]
-        public void Setup()
-        {
-            Geneticist.Debug = true;
-            Geneticist.DebugTextWriter = Console.Out;
-            Geneticist.ThrowOnError = true;
-        }
-
-        [TearDown]
-        public void Tear()
-        {
-        }
-
+    public class EnumerableMappingTests : TestBase
+    { 
         [Test]
         public void GetEnumerableElementTypeTest()
         {
