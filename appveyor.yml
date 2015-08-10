@@ -34,15 +34,14 @@ on_finish:
   - appveyor UnregisterXamarinLicense -Email %XamarinEmail% -Password %XamarinPassword%
 
 test_script:
-  # 1. build the test APK
-  # 2. upload to Xamarin Test Cloud
-  # 3. upload the test results
   - ps: >-
+      Write-Host "Building the test APK...";
       msbuild GeneticsTests\GeneticsTests.csproj `
         /p:Configuration=$env:configuration `
         /p:Platform=AnyCPU `
         /t:PackageForAndroid
       
+      Write-Host "Uploading to Xamarin Test Cloud...";
       .\packages\Xamarin.UITest.1.0.0\tools\test-cloud.exe `
         submit GeneticsTests\bin\$env:configuration\com.example.genetics.GeneticsTests.apk `
         $env:XamarinTestCloudApiKey `
@@ -53,6 +52,7 @@ test_script:
         --assembly-dir GeneticsUITests\bin\$env:configuration `
         --nunit-xml GeneticsUITests.Results.xml
       
+      Write-Host "Uploading the test results...";
       If ($LastExitCode -ne 0 -and $LastExitCode -ne 19)
       {
         exit $LastExitCode;
@@ -60,6 +60,7 @@ test_script:
       $path = (Resolve-Path .\GeneticsUITests.Results.xml); 
       $wc = (New-Object 'System.Net.WebClient'); 
       $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", $path); 
+      Write-Host "Done.";
   
 # artifacts
 artifacts: 
