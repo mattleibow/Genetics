@@ -34,12 +34,12 @@ on_finish:
   - appveyor UnregisterXamarinLicense -Email %XamarinEmail% -Password %XamarinPassword%
 
 test_script:
-  - msbuild GeneticsTests\GeneticsTests.csproj /p:Configuration=%configuration% /t:PackageForAndroid
-  - packages\Xamarin.UITest.1.0.0\tools\test-cloud.exe submit GeneticsTests\bin\%configuration%\com.example.genetics.GeneticsTests.apk %XamarinTestCloudApiKey% --devices 1a154f10 --series "master" --locale "en_US" --user %XamarinEmail% --assembly-dir GeneticsUITests\bin\%configuration% --nunit-xml GeneticsUITests.Results.xml
+  - msbuild GeneticsTests\GeneticsTests.csproj /p:Configuration=Release /t:PackageForAndroid
+  - packages\Xamarin.UITest.1.0.0\tools\test-cloud.exe submit GeneticsTests\bin\Release\com.example.genetics.GeneticsTests.apk %XamarinTestCloudApiKey% --devices 1a154f10 --series "master" --locale "en_US" --user %XamarinEmail% --assembly-dir GeneticsUITests\bin\Release --nunit-xml GeneticsUITests.Results.xml
   
 # artifacts
 artifacts: 
-  - path: Genetics\bin\%configuration%\
+  - path: Genetics\bin\Release\
     name: Genetics-$(APPVEYOR_BUILD_VERSION) 
     type: zip 
   - path: Genetics*.nupkg
