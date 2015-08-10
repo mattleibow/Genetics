@@ -37,27 +37,29 @@ test_script:
   # 1. build the test APK
   # 2. upload to Xamarin Test Cloud
   # 3. upload the test results
-  - ps: >
-    msbuild GeneticsTests\GeneticsTests.csproj `
-      /p:Configuration=$env:configuration `
-      /p:Platform=AnyCPU `
-      /t:PackageForAndroid
-    .\packages\Xamarin.UITest.1.0.0\tools\test-cloud.exe `
-      submit GeneticsTests\bin\$env:configuration\com.example.genetics.GeneticsTests.apk `
-      $env:XamarinTestCloudApiKey `
-      --devices 1a154f10 `
-      --series "master" `
-      --locale "en_US" `
-      --user $env:XamarinEmail `
-      --assembly-dir GeneticsUITests\bin\$env:configuration `
-      --nunit-xml GeneticsUITests.Results.xml
-    If ($LastExitCode -ne 0 -and $LastExitCode -ne 19)
-    {
-      exit $LastExitCode
-    }
-    $path = (Resolve-Path .\GeneticsUITests.Results.xml)
-    $wc = (New-Object 'System.Net.WebClient');
-    $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", $path)
+  - ps: >-
+      msbuild GeneticsTests\GeneticsTests.csproj `
+        /p:Configuration=$env:configuration `
+        /p:Platform=AnyCPU `
+        /t:PackageForAndroid
+      
+      .\packages\Xamarin.UITest.1.0.0\tools\test-cloud.exe `
+        submit GeneticsTests\bin\$env:configuration\com.example.genetics.GeneticsTests.apk `
+        $env:XamarinTestCloudApiKey `
+        --devices 1a154f10 `
+        --series "master" `
+        --locale "en_US" `
+        --user $env:XamarinEmail `
+        --assembly-dir GeneticsUITests\bin\$env:configuration `
+        --nunit-xml GeneticsUITests.Results.xml
+      
+      If ($LastExitCode -ne 0 -and $LastExitCode -ne 19)
+      {
+        exit $LastExitCode
+      }
+      $path = (Resolve-Path .\GeneticsUITests.Results.xml)
+      $wc = (New-Object 'System.Net.WebClient');
+      $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", $path)
   
 # artifacts
 artifacts: 
