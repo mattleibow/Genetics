@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>Genetics</id>
+        <version>$version$</version>
+        <title>Genetics for Xamarin.Android</title>
+        <authors>.NET Development Addict</authors>
+        <licenseUrl>https://raw.githubusercontent.com/mattleibow/Genetics/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/mattleibow/Genetics</projectUrl>
+        <iconUrl>https://raw.githubusercontent.com/mattleibow/Genetics/master/Icons/Genetics_256x256.png</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>An attribute-based injection of Android resources, views and event handlers.</description>
+        <summary>An attribute-based injection of Android resources, views and event handlers.</summary>
+        <releaseNotes></releaseNotes>
+        <copyright>.NET Development Addict</copyright>
+        <tags>Xamarin, Android, AOP, Resources, Views, Injection</tags>
+    </metadata>
+    <files>
+        <file src="README.md" target="README.md" />
+        <file src="LICENSE.md" target="LICENSE.md" />
+        
+        <file src="Genetics/bin/Release/Genetics.dll" target="lib\MonoAndroid\Genetics.dll" />
+    </files>
+</package>

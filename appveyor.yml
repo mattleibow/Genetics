@@ -30,6 +30,22 @@ before_build:
 build: 
   project: Genetics.sln 
   verbosity: normal
+after_build:
+  - ps: >-
+      $nugetVersion = $env:version;
+      
+      Write-Host "Setting .nuspec version tag to $nugetVersion...";
+      $content = (Get-Content Genetics.nuspec);
+      $content = $content -replace '\$version\$', $nugetVersion;
+      $content | Out-File Genetics.nuspec;
+      nuget pack Genetics.nuspec;
+
+      Write-Host "Setting component.yaml version tag to $nugetVersion...";
+      $content = (Get-Content component.yaml);
+      $content = $content -replace '\$version\$', $nugetVersion;
+      $content | Out-File component.yaml;
+      ./Tools/xamarin-component.exe package ./;
+      
 on_finish:
   - appveyor UnregisterXamarinLicense -Email %XamarinEmail% -Password %XamarinPassword%
 
@@ -67,9 +83,8 @@ test_script:
   
 # artifacts
 artifacts: 
-  - path: Genetics\bin\%configuration%\
+  - path: Genetics\bin\$(configuration)\
     name: Genetics-$(APPVEYOR_BUILD_VERSION) 
     type: zip 
   - path: Genetics*.nupkg
   - path: Genetics*.xam
-  - path: GeneticsUITests.Results.xml
