@@ -18,6 +18,12 @@ namespace Genetics
         private readonly static Dictionary<Type, IEventGene> eventGenes;
         private readonly static Dictionary<Type, TypeMapping> typeMappings;
 
+        // performance improvements
+        private static bool debug;
+        private static TextWriter debugTextWriter;
+        private static bool throwOnError;
+        private static bool willWriteToDebug;
+
         static Geneticist()
         {
             typeMappings = new Dictionary<Type, TypeMapping>();
@@ -41,11 +47,31 @@ namespace Genetics
             get { return typeMappings.Values.ToArray(); }
         }
 
-        public static bool Debug { get; set; }
+        public static bool Debug
+        {
+            get { return debug; }
+            set
+            {
+                debug = value;
+                willWriteToDebug = (debug && debugTextWriter != null);
+            }
+        }
 
-        public static TextWriter DebugTextWriter { get; set; }
+        public static TextWriter DebugTextWriter
+        {
+            get { return debugTextWriter; }
+            set
+            {
+                debugTextWriter = value;
+                willWriteToDebug = (debug && debugTextWriter != null);
+            }
+        }
 
-        public static bool ThrowOnError { get; set; }
+        public static bool ThrowOnError
+        {
+            get { return throwOnError; }
+            set { throwOnError = value; }
+        }
 
         public static void Splice(Activity target)
         {
@@ -132,38 +158,50 @@ namespace Genetics
                 memberSpliced = gene.Splice(target, source, resourceType, resourceId, context, memberMapping);
                 if (memberSpliced)
                 {
-                    HandleMessage(
-                        "Spliced resource '{0}' with id '{1}' to member '{2}'.",
-                        context.Resources.GetResourceName(resourceId),
-                        resourceId,
-                        memberMapping.Member.Name);
+                    if (willWriteToDebug)
+                    {
+                        HandleMessage(
+                            "Spliced resource '{0}' with id '{1}' to member '{2}'.",
+                            context.Resources.GetResourceName(resourceId),
+                            resourceId,
+                            memberMapping.Member.Name);
+                    }
                 }
                 else
                 {
                     if (memberMapping.Attribute.Optional)
                     {
-                        HandleMessage(
-                            "Skipping splice for resource '{0}' with id '{1}' to member '{2}'.",
-                            context.Resources.GetResourceName(resourceId),
-                            resourceId,
-                            memberMapping.Member.Name);
+                        if (willWriteToDebug)
+                        {
+                            HandleMessage(
+                                "Skipping splice for resource '{0}' with id '{1}' to member '{2}'.",
+                                context.Resources.GetResourceName(resourceId),
+                                resourceId,
+                                memberMapping.Member.Name);
+                        }
                     }
                     else
                     {
-                        HandleError(
-                            "Unable to splice resource '{0}' with id '{1}' to member '{2}'.",
-                            context.Resources.GetResourceName(resourceId),
-                            resourceId,
-                            memberMapping.Member.Name);
+                        if (willWriteToDebug || throwOnError)
+                        {
+                            HandleError(
+                                "Unable to splice resource '{0}' with id '{1}' to member '{2}'.",
+                                context.Resources.GetResourceName(resourceId),
+                                resourceId,
+                                memberMapping.Member.Name);
+                        }
                     }
                 }
             }
             else
             {
-                HandleError(
-                    "No member gene found for resource type '{0}' and member type '{1}'.",
-                    resourceType,
-                    memberMapping.MemberType.FullName);
+                if (willWriteToDebug || throwOnError)
+                {
+                    HandleError(
+                        "No member gene found for resource type '{0}' and member type '{1}'.",
+                        resourceType,
+                        memberMapping.MemberType.FullName);
+                }
             }
         }
 
@@ -183,47 +221,62 @@ namespace Genetics
 
                     if (methodSpliced)
                     {
-                        HandleMessage(
-                            "Spliced handler for event '{0}' on view with id '{1}' for method '{2}'.",
-                            attr.EventName,
-                            context.Resources.GetResourceName(attr.ViewId),
-                            methodMapping.Method.Name);
+                        if (willWriteToDebug)
+                        {
+                            HandleMessage(
+                                "Spliced handler for event '{0}' on view with id '{1}' for method '{2}'.",
+                                attr.EventName,
+                                context.Resources.GetResourceName(attr.ViewId),
+                                methodMapping.Method.Name);
+                        }
                     }
                     else
                     {
                         if (methodMapping.Attribute.Optional)
                         {
-                            HandleMessage(
-                                "Skipping splice of handler for event '{0}' with id '{1}' for method '{2}'.",
-                                attr.EventName,
-                                context.Resources.GetResourceName(attr.ViewId),
-                                methodMapping.Method.Name);
+                            if (willWriteToDebug)
+                            {
+                                HandleMessage(
+                                    "Skipping splice of handler for event '{0}' with id '{1}' for method '{2}'.",
+                                    attr.EventName,
+                                    context.Resources.GetResourceName(attr.ViewId),
+                                    methodMapping.Method.Name);
+                            }
                         }
                         else
                         {
-                            HandleError(
-                                "Unable to splice handler for event '{0}' with id '{1}' for method '{2}'.",
-                                attr.EventName,
-                                context.Resources.GetResourceName(attr.ViewId),
-                                methodMapping.Method.Name);
+                            if (willWriteToDebug || throwOnError)
+                            {
+                                HandleError(
+                                    "Unable to splice handler for event '{0}' with id '{1}' for method '{2}'.",
+                                    attr.EventName,
+                                    context.Resources.GetResourceName(attr.ViewId),
+                                    methodMapping.Method.Name);
+                            }
                         }
                     }
                 }
                 else
                 {
-                    HandleError(
-                        "No event gene found for event '{0}' on view with id '{1}' for method '{2}'.",
-                        attr.EventName,
-                        context.Resources.GetResourceName(attr.ViewId),
-                        methodMapping.Method.Name);
+                    if (willWriteToDebug || throwOnError)
+                    {
+                        HandleError(
+                            "No event gene found for event '{0}' on view with id '{1}' for method '{2}'.",
+                            attr.EventName,
+                            context.Resources.GetResourceName(attr.ViewId),
+                            methodMapping.Method.Name);
+                    }
                 }
             }
             else
             {
-                HandleError(
-                    "No view found with id '{0}' for method '{1}'.",
-                    context.Resources.GetResourceName(attr.ViewId),
-                    methodMapping.Method.Name);
+                if (willWriteToDebug || throwOnError)
+                {
+                    HandleError(
+                        "No view found with id '{0}' for method '{1}'.",
+                        context.Resources.GetResourceName(attr.ViewId),
+                        methodMapping.Method.Name);
+                }
             }
         }
 
@@ -309,18 +362,25 @@ namespace Genetics
             if (gene != null)
             {
                 gene.Sever(target, source, resourceType, resourceId, context, memberMapping);
-                HandleMessage(
-                    "Severed resource '{0}' with id '{1}' to member '{2}'.",
-                    context.Resources.GetResourceName(resourceId),
-                    resourceId,
-                    memberMapping.Member.Name);
+
+                if (willWriteToDebug)
+                {
+                    HandleMessage(
+                        "Severed resource '{0}' with id '{1}' to member '{2}'.",
+                        context.Resources.GetResourceName(resourceId),
+                        resourceId,
+                        memberMapping.Member.Name);
+                }
             }
             else
             {
-                HandleError(
-                    "No member gene found for resource type '{0}' and member type '{1}'.",
-                    resourceType,
-                    memberMapping.MemberType.FullName);
+                if (willWriteToDebug || throwOnError)
+                {
+                    HandleError(
+                        "No member gene found for resource type '{0}' and member type '{1}'.",
+                        resourceType,
+                        memberMapping.MemberType.FullName);
+                }
             }
         }
 
@@ -344,19 +404,25 @@ namespace Genetics
                 }
                 else
                 {
-                    HandleError(
-                        "No event gene found for event '{0}' on view with id '{1}' for method '{2}'.",
-                        attr.EventName,
-                        context.Resources.GetResourceName(attr.ViewId),
-                        methodMapping.Method.Name);
+                    if (willWriteToDebug || throwOnError)
+                    {
+                        HandleError(
+                            "No event gene found for event '{0}' on view with id '{1}' for method '{2}'.",
+                            attr.EventName,
+                            context.Resources.GetResourceName(attr.ViewId),
+                            methodMapping.Method.Name);
+                    }
                 }
             }
             else
             {
-                HandleMessage(
-                    "No view found with id '{0}' for method '{1}'.",
-                    context.Resources.GetResourceName(attr.ViewId),
-                    methodMapping.Method.Name);
+                if (willWriteToDebug)
+                {
+                    HandleMessage(
+                        "No view found with id '{0}' for method '{1}'.",
+                        context.Resources.GetResourceName(attr.ViewId),
+                        methodMapping.Method.Name);
+                }
             }
         }
 
@@ -384,14 +450,20 @@ namespace Genetics
 
             if (typeMappings.ContainsKey(type))
             {
-                // we have done it already
-                HandleMessage("Using cached TypeMapping for type {0}.", type);
+                if (willWriteToDebug)
+                {
+                    // we have done it already
+                    HandleMessage("Using cached TypeMapping for type {0}.", type);
+                }
                 mapping = typeMappings[type];
             }
             else
             {
-                // we need to build the splice
-                HandleMessage("Creating a new TypeMapping for type {0}.", type);
+                if (willWriteToDebug)
+                {
+                    // we need to build the splice
+                    HandleMessage("Creating a new TypeMapping for type {0}.", type);
+                }
                 mapping = new TypeMapping(type);
                 typeMappings.Add(type, mapping);
             }
@@ -426,11 +498,14 @@ namespace Genetics
 
             if (gene != null)
             {
-                HandleMessage(
-                    "Found member gene for resource type '{0}' and member type '{1}': {2}",
-                    resourceType,
-                    member.MemberType.FullName,
-                    gene.GetType().FullName);
+                if (willWriteToDebug)
+                {
+                    HandleMessage(
+                        "Found member gene for resource type '{0}' and member type '{1}': {2}",
+                        resourceType,
+                        member.MemberType.FullName,
+                        gene.GetType().FullName);
+                }
             }
 
             return gene;
@@ -458,10 +533,13 @@ namespace Genetics
 
             if (gene != null)
             {
-                HandleMessage(
-                    "Found event gene for view type '{0}': {1}",
-                    viewType.FullName,
-                    gene.GetType().FullName);
+                if (willWriteToDebug)
+                {
+                    HandleMessage(
+                        "Found event gene for view type '{0}': {1}",
+                        viewType.FullName,
+                        gene.GetType().FullName);
+                }
             }
 
             return gene;
@@ -470,48 +548,59 @@ namespace Genetics
         public static void RegisterGene(string resourceType, Type targetType, IGene gene)
         {
             Dictionary<Type, IGene> geneCollection;
-            if (!genes.TryGetValue(resourceType, out geneCollection))
+            var exists = genes.TryGetValue(resourceType, out geneCollection);
+            if (!exists)
             {
                 geneCollection = new Dictionary<Type, IGene>();
                 genes.Add(resourceType, geneCollection);
-                HandleMessage(
-                    "Registered a new resource type: '{0}'",
-                    resourceType);
+                if (willWriteToDebug)
+                {
+                    HandleMessage(
+                        "Registered a new resource type: '{0}'",
+                        resourceType);
+                }
             }
-            if (geneCollection.ContainsKey(targetType))
+
+            if (willWriteToDebug)
             {
-                HandleMessage(
-                    "Replacing a gene registration for resource type '{0}' and member type '{1}': '{2}'",
-                    resourceType,
-                    targetType.FullName,
-                    gene.GetType().FullName);
-            }
-            else
-            {
-                HandleMessage(
-                    "Registered a new gene for resource type '{0}' and member type '{1}': '{2}'",
-                    resourceType,
-                    targetType.FullName,
-                    gene.GetType().FullName);
+                if (exists)
+                {
+                    HandleMessage(
+                        "Replacing a gene registration for resource type '{0}' and member type '{1}': '{2}'",
+                        resourceType,
+                        targetType.FullName,
+                        gene.GetType().FullName);
+                }
+                else
+                {
+                    HandleMessage(
+                        "Registered a new gene for resource type '{0}' and member type '{1}': '{2}'",
+                        resourceType,
+                        targetType.FullName,
+                        gene.GetType().FullName);
+                }
             }
             geneCollection[targetType] = gene;
         }
 
         public static void RegisterEventGene(Type targetType, IEventGene gene)
         {
-            if (eventGenes.ContainsKey(targetType))
+            if (willWriteToDebug)
             {
-                HandleMessage(
-                    "Replacing an event gene registration for view type '{0}': '{2}'",
-                    targetType.FullName,
-                    gene.GetType().FullName);
-            }
-            else
-            {
-                HandleMessage(
-                    "Registered a new event gene for view type '{1}': '{2}'",
-                    targetType.FullName,
-                    gene.GetType().FullName);
+                if (eventGenes.ContainsKey(targetType))
+                {
+                    HandleMessage(
+                        "Replacing an event gene registration for view type '{0}': '{2}'",
+                        targetType.FullName,
+                        gene.GetType().FullName);
+                }
+                else
+                {
+                    HandleMessage(
+                        "Registered a new event gene for view type '{1}': '{2}'",
+                        targetType.FullName,
+                        gene.GetType().FullName);
+                }
             }
             eventGenes[targetType] = gene;
         }
@@ -572,11 +661,11 @@ namespace Genetics
         internal static void HandleError(Exception exception, string format, params object[] args)
         {
             // make sure we don't multi-splice
-            if (Debug && DebugTextWriter != null)
+            if (debug && debugTextWriter != null)
             {
-                DebugTextWriter.WriteLine(format, args);
+                debugTextWriter.WriteLine(format, args);
             }
-            if (ThrowOnError)
+            if (throwOnError)
             {
                 throw new SpliceException(string.Format(format, args), exception);
             }
@@ -585,9 +674,9 @@ namespace Genetics
         internal static void HandleMessage(string format, params object[] args)
         {
             // make sure we don't multi-splice
-            if (Debug && DebugTextWriter != null)
+            if (debug && debugTextWriter != null)
             {
-                DebugTextWriter.WriteLine(format, args);
+                debugTextWriter.WriteLine(format, args);
             }
         }
     }

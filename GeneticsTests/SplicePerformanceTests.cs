@@ -3,6 +3,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Xml;
 using Android.App;
 using Android.Content.Res;
@@ -22,7 +23,8 @@ namespace GeneticsTests
     [TestFixture]
     public class SplicePerformanceTests : TestBase
     { 
-        private const int AllowableOverhead = 250;
+        private const int AllowableOverhead = 100;
+        private const int AttemptCount = 25;
 
         [SetUp]
         public override void Setup()
@@ -39342,274 +39344,417 @@ namespace GeneticsTests
         [Test]
         public void AnimationPerformanceTest()
         {
-            var manualTimer = Stopwatch.StartNew();
-            var manual = new AnimationPerformanceTestCase();
-            manual.SpliceManually();
-            manualTimer.Stop();
-            var manualMilliseconds = manualTimer.ElapsedMilliseconds;
+            var manuals = new long[AttemptCount];
+            var autos = new long[AttemptCount];
+            for (var i = 0; i < AttemptCount; i++) 
+            {
+                var manual = new AnimationPerformanceTestCase();
+                GC.Collect();
+                var manualTimer = Stopwatch.StartNew();
+                manual.SpliceManually();
+                manualTimer.Stop();
+                manuals[i] = manualTimer.ElapsedMilliseconds;
+                
+                var automatic = new AnimationPerformanceTestCase();
+                GC.Collect();
+                var automaticTimer = Stopwatch.StartNew();
+                automatic.SpliceAutomatically();
+                automaticTimer.Stop();
+                autos[i] = automaticTimer.ElapsedMilliseconds;
+               
+                manual.AssertNotDefault();
+                automatic.AssertNotDefault();
+            }
             
-            var automaticTimer = Stopwatch.StartNew();
-            var automatic = new AnimationPerformanceTestCase();
-            automatic.SpliceAutomatically();
-            automaticTimer.Stop();
-            var automaticMilliseconds = automaticTimer.ElapsedMilliseconds;
-
-            manual.AssertNotDefault();
-            automatic.AssertNotDefault();
-
-            Assert.IsTrue(Math.Abs(automaticMilliseconds - manualMilliseconds) < AllowableOverhead, "The difference {0}ms was greater than expected {1}ms.", Math.Abs(automaticMilliseconds - manualMilliseconds), AllowableOverhead);
+            var autoAvg = autos.Average();
+            var manualAvg = manuals.Average();
+            var diff = Math.Abs(autoAvg - manualAvg);
+            Console.WriteLine("Animation Performace: automatic={0:0.00}ms, manual={1:0.00}ms, difference={2:0.00}ms", autoAvg, manualAvg, diff);
+            Assert.IsTrue(diff < AllowableOverhead, "The avderage difference {0}ms was greater than expected {1}ms.", diff, AllowableOverhead);
         }
 
         [Test]
         public void AnimatorPerformanceTest()
         {
-            var manualTimer = Stopwatch.StartNew();
-            var manual = new AnimatorPerformanceTestCase();
-            manual.SpliceManually();
-            manualTimer.Stop();
-            var manualMilliseconds = manualTimer.ElapsedMilliseconds;
+            var manuals = new long[AttemptCount];
+            var autos = new long[AttemptCount];
+            for (var i = 0; i < AttemptCount; i++) 
+            {
+                var manual = new AnimatorPerformanceTestCase();
+                GC.Collect();
+                var manualTimer = Stopwatch.StartNew();
+                manual.SpliceManually();
+                manualTimer.Stop();
+                manuals[i] = manualTimer.ElapsedMilliseconds;
+                
+                var automatic = new AnimatorPerformanceTestCase();
+                GC.Collect();
+                var automaticTimer = Stopwatch.StartNew();
+                automatic.SpliceAutomatically();
+                automaticTimer.Stop();
+                autos[i] = automaticTimer.ElapsedMilliseconds;
+               
+                manual.AssertNotDefault();
+                automatic.AssertNotDefault();
+            }
             
-            var automaticTimer = Stopwatch.StartNew();
-            var automatic = new AnimatorPerformanceTestCase();
-            automatic.SpliceAutomatically();
-            automaticTimer.Stop();
-            var automaticMilliseconds = automaticTimer.ElapsedMilliseconds;
-
-            manual.AssertNotDefault();
-            automatic.AssertNotDefault();
-
-            Assert.IsTrue(Math.Abs(automaticMilliseconds - manualMilliseconds) < AllowableOverhead, "The difference {0}ms was greater than expected {1}ms.", Math.Abs(automaticMilliseconds - manualMilliseconds), AllowableOverhead);
+            var autoAvg = autos.Average();
+            var manualAvg = manuals.Average();
+            var diff = Math.Abs(autoAvg - manualAvg);
+            Console.WriteLine("Animator Performace: automatic={0:0.00}ms, manual={1:0.00}ms, difference={2:0.00}ms", autoAvg, manualAvg, diff);
+            Assert.IsTrue(diff < AllowableOverhead, "The avderage difference {0}ms was greater than expected {1}ms.", diff, AllowableOverhead);
         }
 
         [Test]
         public void DrawablePerformanceTest()
         {
-            var manualTimer = Stopwatch.StartNew();
-            var manual = new DrawablePerformanceTestCase();
-            manual.SpliceManually();
-            manualTimer.Stop();
-            var manualMilliseconds = manualTimer.ElapsedMilliseconds;
+            var manuals = new long[AttemptCount];
+            var autos = new long[AttemptCount];
+            for (var i = 0; i < AttemptCount; i++) 
+            {
+                var manual = new DrawablePerformanceTestCase();
+                GC.Collect();
+                var manualTimer = Stopwatch.StartNew();
+                manual.SpliceManually();
+                manualTimer.Stop();
+                manuals[i] = manualTimer.ElapsedMilliseconds;
+                
+                var automatic = new DrawablePerformanceTestCase();
+                GC.Collect();
+                var automaticTimer = Stopwatch.StartNew();
+                automatic.SpliceAutomatically();
+                automaticTimer.Stop();
+                autos[i] = automaticTimer.ElapsedMilliseconds;
+               
+                manual.AssertNotDefault();
+                automatic.AssertNotDefault();
+            }
             
-            var automaticTimer = Stopwatch.StartNew();
-            var automatic = new DrawablePerformanceTestCase();
-            automatic.SpliceAutomatically();
-            automaticTimer.Stop();
-            var automaticMilliseconds = automaticTimer.ElapsedMilliseconds;
-
-            manual.AssertNotDefault();
-            automatic.AssertNotDefault();
-
-            Assert.IsTrue(Math.Abs(automaticMilliseconds - manualMilliseconds) < AllowableOverhead, "The difference {0}ms was greater than expected {1}ms.", Math.Abs(automaticMilliseconds - manualMilliseconds), AllowableOverhead);
+            var autoAvg = autos.Average();
+            var manualAvg = manuals.Average();
+            var diff = Math.Abs(autoAvg - manualAvg);
+            Console.WriteLine("Drawable Performace: automatic={0:0.00}ms, manual={1:0.00}ms, difference={2:0.00}ms", autoAvg, manualAvg, diff);
+            Assert.IsTrue(diff < AllowableOverhead, "The avderage difference {0}ms was greater than expected {1}ms.", diff, AllowableOverhead);
         }
 
         [Test]
         public void BooleanPerformanceTest()
         {
-            var manualTimer = Stopwatch.StartNew();
-            var manual = new BooleanPerformanceTestCase();
-            manual.SpliceManually();
-            manualTimer.Stop();
-            var manualMilliseconds = manualTimer.ElapsedMilliseconds;
+            var manuals = new long[AttemptCount];
+            var autos = new long[AttemptCount];
+            for (var i = 0; i < AttemptCount; i++) 
+            {
+                var manual = new BooleanPerformanceTestCase();
+                GC.Collect();
+                var manualTimer = Stopwatch.StartNew();
+                manual.SpliceManually();
+                manualTimer.Stop();
+                manuals[i] = manualTimer.ElapsedMilliseconds;
+                
+                var automatic = new BooleanPerformanceTestCase();
+                GC.Collect();
+                var automaticTimer = Stopwatch.StartNew();
+                automatic.SpliceAutomatically();
+                automaticTimer.Stop();
+                autos[i] = automaticTimer.ElapsedMilliseconds;
+               
+                manual.AssertNotDefault();
+                automatic.AssertNotDefault();
+            }
             
-            var automaticTimer = Stopwatch.StartNew();
-            var automatic = new BooleanPerformanceTestCase();
-            automatic.SpliceAutomatically();
-            automaticTimer.Stop();
-            var automaticMilliseconds = automaticTimer.ElapsedMilliseconds;
-
-            manual.AssertNotDefault();
-            automatic.AssertNotDefault();
-
-            Assert.IsTrue(Math.Abs(automaticMilliseconds - manualMilliseconds) < AllowableOverhead, "The difference {0}ms was greater than expected {1}ms.", Math.Abs(automaticMilliseconds - manualMilliseconds), AllowableOverhead);
+            var autoAvg = autos.Average();
+            var manualAvg = manuals.Average();
+            var diff = Math.Abs(autoAvg - manualAvg);
+            Console.WriteLine("Boolean Performace: automatic={0:0.00}ms, manual={1:0.00}ms, difference={2:0.00}ms", autoAvg, manualAvg, diff);
+            Assert.IsTrue(diff < AllowableOverhead, "The avderage difference {0}ms was greater than expected {1}ms.", diff, AllowableOverhead);
         }
 
         [Test]
         public void ColorPerformanceTest()
         {
-            var manualTimer = Stopwatch.StartNew();
-            var manual = new ColorPerformanceTestCase();
-            manual.SpliceManually();
-            manualTimer.Stop();
-            var manualMilliseconds = manualTimer.ElapsedMilliseconds;
+            var manuals = new long[AttemptCount];
+            var autos = new long[AttemptCount];
+            for (var i = 0; i < AttemptCount; i++) 
+            {
+                var manual = new ColorPerformanceTestCase();
+                GC.Collect();
+                var manualTimer = Stopwatch.StartNew();
+                manual.SpliceManually();
+                manualTimer.Stop();
+                manuals[i] = manualTimer.ElapsedMilliseconds;
+                
+                var automatic = new ColorPerformanceTestCase();
+                GC.Collect();
+                var automaticTimer = Stopwatch.StartNew();
+                automatic.SpliceAutomatically();
+                automaticTimer.Stop();
+                autos[i] = automaticTimer.ElapsedMilliseconds;
+               
+                manual.AssertNotDefault();
+                automatic.AssertNotDefault();
+            }
             
-            var automaticTimer = Stopwatch.StartNew();
-            var automatic = new ColorPerformanceTestCase();
-            automatic.SpliceAutomatically();
-            automaticTimer.Stop();
-            var automaticMilliseconds = automaticTimer.ElapsedMilliseconds;
-
-            manual.AssertNotDefault();
-            automatic.AssertNotDefault();
-
-            Assert.IsTrue(Math.Abs(automaticMilliseconds - manualMilliseconds) < AllowableOverhead, "The difference {0}ms was greater than expected {1}ms.", Math.Abs(automaticMilliseconds - manualMilliseconds), AllowableOverhead);
+            var autoAvg = autos.Average();
+            var manualAvg = manuals.Average();
+            var diff = Math.Abs(autoAvg - manualAvg);
+            Console.WriteLine("Color Performace: automatic={0:0.00}ms, manual={1:0.00}ms, difference={2:0.00}ms", autoAvg, manualAvg, diff);
+            Assert.IsTrue(diff < AllowableOverhead, "The avderage difference {0}ms was greater than expected {1}ms.", diff, AllowableOverhead);
         }
 
         [Test]
         public void ColorStateListPerformanceTest()
         {
-            var manualTimer = Stopwatch.StartNew();
-            var manual = new ColorStateListPerformanceTestCase();
-            manual.SpliceManually();
-            manualTimer.Stop();
-            var manualMilliseconds = manualTimer.ElapsedMilliseconds;
+            var manuals = new long[AttemptCount];
+            var autos = new long[AttemptCount];
+            for (var i = 0; i < AttemptCount; i++) 
+            {
+                var manual = new ColorStateListPerformanceTestCase();
+                GC.Collect();
+                var manualTimer = Stopwatch.StartNew();
+                manual.SpliceManually();
+                manualTimer.Stop();
+                manuals[i] = manualTimer.ElapsedMilliseconds;
+                
+                var automatic = new ColorStateListPerformanceTestCase();
+                GC.Collect();
+                var automaticTimer = Stopwatch.StartNew();
+                automatic.SpliceAutomatically();
+                automaticTimer.Stop();
+                autos[i] = automaticTimer.ElapsedMilliseconds;
+               
+                manual.AssertNotDefault();
+                automatic.AssertNotDefault();
+            }
             
-            var automaticTimer = Stopwatch.StartNew();
-            var automatic = new ColorStateListPerformanceTestCase();
-            automatic.SpliceAutomatically();
-            automaticTimer.Stop();
-            var automaticMilliseconds = automaticTimer.ElapsedMilliseconds;
-
-            manual.AssertNotDefault();
-            automatic.AssertNotDefault();
-
-            Assert.IsTrue(Math.Abs(automaticMilliseconds - manualMilliseconds) < AllowableOverhead, "The difference {0}ms was greater than expected {1}ms.", Math.Abs(automaticMilliseconds - manualMilliseconds), AllowableOverhead);
+            var autoAvg = autos.Average();
+            var manualAvg = manuals.Average();
+            var diff = Math.Abs(autoAvg - manualAvg);
+            Console.WriteLine("ColorStateList Performace: automatic={0:0.00}ms, manual={1:0.00}ms, difference={2:0.00}ms", autoAvg, manualAvg, diff);
+            Assert.IsTrue(diff < AllowableOverhead, "The avderage difference {0}ms was greater than expected {1}ms.", diff, AllowableOverhead);
         }
 
         [Test]
         public void DimensionPerformanceTest()
         {
-            var manualTimer = Stopwatch.StartNew();
-            var manual = new DimensionPerformanceTestCase();
-            manual.SpliceManually();
-            manualTimer.Stop();
-            var manualMilliseconds = manualTimer.ElapsedMilliseconds;
+            var manuals = new long[AttemptCount];
+            var autos = new long[AttemptCount];
+            for (var i = 0; i < AttemptCount; i++) 
+            {
+                var manual = new DimensionPerformanceTestCase();
+                GC.Collect();
+                var manualTimer = Stopwatch.StartNew();
+                manual.SpliceManually();
+                manualTimer.Stop();
+                manuals[i] = manualTimer.ElapsedMilliseconds;
+                
+                var automatic = new DimensionPerformanceTestCase();
+                GC.Collect();
+                var automaticTimer = Stopwatch.StartNew();
+                automatic.SpliceAutomatically();
+                automaticTimer.Stop();
+                autos[i] = automaticTimer.ElapsedMilliseconds;
+               
+                manual.AssertNotDefault();
+                automatic.AssertNotDefault();
+            }
             
-            var automaticTimer = Stopwatch.StartNew();
-            var automatic = new DimensionPerformanceTestCase();
-            automatic.SpliceAutomatically();
-            automaticTimer.Stop();
-            var automaticMilliseconds = automaticTimer.ElapsedMilliseconds;
-
-            manual.AssertNotDefault();
-            automatic.AssertNotDefault();
-
-            Assert.IsTrue(Math.Abs(automaticMilliseconds - manualMilliseconds) < AllowableOverhead, "The difference {0}ms was greater than expected {1}ms.", Math.Abs(automaticMilliseconds - manualMilliseconds), AllowableOverhead);
+            var autoAvg = autos.Average();
+            var manualAvg = manuals.Average();
+            var diff = Math.Abs(autoAvg - manualAvg);
+            Console.WriteLine("Dimension Performace: automatic={0:0.00}ms, manual={1:0.00}ms, difference={2:0.00}ms", autoAvg, manualAvg, diff);
+            Assert.IsTrue(diff < AllowableOverhead, "The avderage difference {0}ms was greater than expected {1}ms.", diff, AllowableOverhead);
         }
 
         [Test]
         public void IntegerPerformanceTest()
         {
-            var manualTimer = Stopwatch.StartNew();
-            var manual = new IntegerPerformanceTestCase();
-            manual.SpliceManually();
-            manualTimer.Stop();
-            var manualMilliseconds = manualTimer.ElapsedMilliseconds;
+            var manuals = new long[AttemptCount];
+            var autos = new long[AttemptCount];
+            for (var i = 0; i < AttemptCount; i++) 
+            {
+                var manual = new IntegerPerformanceTestCase();
+                GC.Collect();
+                var manualTimer = Stopwatch.StartNew();
+                manual.SpliceManually();
+                manualTimer.Stop();
+                manuals[i] = manualTimer.ElapsedMilliseconds;
+                
+                var automatic = new IntegerPerformanceTestCase();
+                GC.Collect();
+                var automaticTimer = Stopwatch.StartNew();
+                automatic.SpliceAutomatically();
+                automaticTimer.Stop();
+                autos[i] = automaticTimer.ElapsedMilliseconds;
+               
+                manual.AssertNotDefault();
+                automatic.AssertNotDefault();
+            }
             
-            var automaticTimer = Stopwatch.StartNew();
-            var automatic = new IntegerPerformanceTestCase();
-            automatic.SpliceAutomatically();
-            automaticTimer.Stop();
-            var automaticMilliseconds = automaticTimer.ElapsedMilliseconds;
-
-            manual.AssertNotDefault();
-            automatic.AssertNotDefault();
-
-            Assert.IsTrue(Math.Abs(automaticMilliseconds - manualMilliseconds) < AllowableOverhead, "The difference {0}ms was greater than expected {1}ms.", Math.Abs(automaticMilliseconds - manualMilliseconds), AllowableOverhead);
+            var autoAvg = autos.Average();
+            var manualAvg = manuals.Average();
+            var diff = Math.Abs(autoAvg - manualAvg);
+            Console.WriteLine("Integer Performace: automatic={0:0.00}ms, manual={1:0.00}ms, difference={2:0.00}ms", autoAvg, manualAvg, diff);
+            Assert.IsTrue(diff < AllowableOverhead, "The avderage difference {0}ms was greater than expected {1}ms.", diff, AllowableOverhead);
         }
 
         [Test]
         public void StringPerformanceTest()
         {
-            var manualTimer = Stopwatch.StartNew();
-            var manual = new StringPerformanceTestCase();
-            manual.SpliceManually();
-            manualTimer.Stop();
-            var manualMilliseconds = manualTimer.ElapsedMilliseconds;
+            var manuals = new long[AttemptCount];
+            var autos = new long[AttemptCount];
+            for (var i = 0; i < AttemptCount; i++) 
+            {
+                var manual = new StringPerformanceTestCase();
+                GC.Collect();
+                var manualTimer = Stopwatch.StartNew();
+                manual.SpliceManually();
+                manualTimer.Stop();
+                manuals[i] = manualTimer.ElapsedMilliseconds;
+                
+                var automatic = new StringPerformanceTestCase();
+                GC.Collect();
+                var automaticTimer = Stopwatch.StartNew();
+                automatic.SpliceAutomatically();
+                automaticTimer.Stop();
+                autos[i] = automaticTimer.ElapsedMilliseconds;
+               
+                manual.AssertNotDefault();
+                automatic.AssertNotDefault();
+            }
             
-            var automaticTimer = Stopwatch.StartNew();
-            var automatic = new StringPerformanceTestCase();
-            automatic.SpliceAutomatically();
-            automaticTimer.Stop();
-            var automaticMilliseconds = automaticTimer.ElapsedMilliseconds;
-
-            manual.AssertNotDefault();
-            automatic.AssertNotDefault();
-
-            Assert.IsTrue(Math.Abs(automaticMilliseconds - manualMilliseconds) < AllowableOverhead, "The difference {0}ms was greater than expected {1}ms.", Math.Abs(automaticMilliseconds - manualMilliseconds), AllowableOverhead);
+            var autoAvg = autos.Average();
+            var manualAvg = manuals.Average();
+            var diff = Math.Abs(autoAvg - manualAvg);
+            Console.WriteLine("String Performace: automatic={0:0.00}ms, manual={1:0.00}ms, difference={2:0.00}ms", autoAvg, manualAvg, diff);
+            Assert.IsTrue(diff < AllowableOverhead, "The avderage difference {0}ms was greater than expected {1}ms.", diff, AllowableOverhead);
         }
 
         [Test]
         public void XmlPerformanceTest()
         {
-            var manualTimer = Stopwatch.StartNew();
-            var manual = new XmlPerformanceTestCase();
-            manual.SpliceManually();
-            manualTimer.Stop();
-            var manualMilliseconds = manualTimer.ElapsedMilliseconds;
+            var manuals = new long[AttemptCount];
+            var autos = new long[AttemptCount];
+            for (var i = 0; i < AttemptCount; i++) 
+            {
+                var manual = new XmlPerformanceTestCase();
+                GC.Collect();
+                var manualTimer = Stopwatch.StartNew();
+                manual.SpliceManually();
+                manualTimer.Stop();
+                manuals[i] = manualTimer.ElapsedMilliseconds;
+                
+                var automatic = new XmlPerformanceTestCase();
+                GC.Collect();
+                var automaticTimer = Stopwatch.StartNew();
+                automatic.SpliceAutomatically();
+                automaticTimer.Stop();
+                autos[i] = automaticTimer.ElapsedMilliseconds;
+               
+                manual.AssertNotDefault();
+                automatic.AssertNotDefault();
+            }
             
-            var automaticTimer = Stopwatch.StartNew();
-            var automatic = new XmlPerformanceTestCase();
-            automatic.SpliceAutomatically();
-            automaticTimer.Stop();
-            var automaticMilliseconds = automaticTimer.ElapsedMilliseconds;
-
-            manual.AssertNotDefault();
-            automatic.AssertNotDefault();
-
-            Assert.IsTrue(Math.Abs(automaticMilliseconds - manualMilliseconds) < AllowableOverhead, "The difference {0}ms was greater than expected {1}ms.", Math.Abs(automaticMilliseconds - manualMilliseconds), AllowableOverhead);
+            var autoAvg = autos.Average();
+            var manualAvg = manuals.Average();
+            var diff = Math.Abs(autoAvg - manualAvg);
+            Console.WriteLine("Xml Performace: automatic={0:0.00}ms, manual={1:0.00}ms, difference={2:0.00}ms", autoAvg, manualAvg, diff);
+            Assert.IsTrue(diff < AllowableOverhead, "The avderage difference {0}ms was greater than expected {1}ms.", diff, AllowableOverhead);
         }
 
         [Test]
         public void TypedArrayPerformanceTest()
         {
-            var manualTimer = Stopwatch.StartNew();
-            var manual = new TypedArrayPerformanceTestCase();
-            manual.SpliceManually();
-            manualTimer.Stop();
-            var manualMilliseconds = manualTimer.ElapsedMilliseconds;
+            var manuals = new long[AttemptCount];
+            var autos = new long[AttemptCount];
+            for (var i = 0; i < AttemptCount; i++) 
+            {
+                var manual = new TypedArrayPerformanceTestCase();
+                GC.Collect();
+                var manualTimer = Stopwatch.StartNew();
+                manual.SpliceManually();
+                manualTimer.Stop();
+                manuals[i] = manualTimer.ElapsedMilliseconds;
+                
+                var automatic = new TypedArrayPerformanceTestCase();
+                GC.Collect();
+                var automaticTimer = Stopwatch.StartNew();
+                automatic.SpliceAutomatically();
+                automaticTimer.Stop();
+                autos[i] = automaticTimer.ElapsedMilliseconds;
+               
+                manual.AssertNotDefault();
+                automatic.AssertNotDefault();
+            }
             
-            var automaticTimer = Stopwatch.StartNew();
-            var automatic = new TypedArrayPerformanceTestCase();
-            automatic.SpliceAutomatically();
-            automaticTimer.Stop();
-            var automaticMilliseconds = automaticTimer.ElapsedMilliseconds;
-
-            manual.AssertNotDefault();
-            automatic.AssertNotDefault();
-
-            Assert.IsTrue(Math.Abs(automaticMilliseconds - manualMilliseconds) < AllowableOverhead, "The difference {0}ms was greater than expected {1}ms.", Math.Abs(automaticMilliseconds - manualMilliseconds), AllowableOverhead);
+            var autoAvg = autos.Average();
+            var manualAvg = manuals.Average();
+            var diff = Math.Abs(autoAvg - manualAvg);
+            Console.WriteLine("TypedArray Performace: automatic={0:0.00}ms, manual={1:0.00}ms, difference={2:0.00}ms", autoAvg, manualAvg, diff);
+            Assert.IsTrue(diff < AllowableOverhead, "The avderage difference {0}ms was greater than expected {1}ms.", diff, AllowableOverhead);
         }
 
         [Test]
         public void IntArrayPerformanceTest()
         {
-            var manualTimer = Stopwatch.StartNew();
-            var manual = new IntArrayPerformanceTestCase();
-            manual.SpliceManually();
-            manualTimer.Stop();
-            var manualMilliseconds = manualTimer.ElapsedMilliseconds;
+            var manuals = new long[AttemptCount];
+            var autos = new long[AttemptCount];
+            for (var i = 0; i < AttemptCount; i++) 
+            {
+                var manual = new IntArrayPerformanceTestCase();
+                GC.Collect();
+                var manualTimer = Stopwatch.StartNew();
+                manual.SpliceManually();
+                manualTimer.Stop();
+                manuals[i] = manualTimer.ElapsedMilliseconds;
+                
+                var automatic = new IntArrayPerformanceTestCase();
+                GC.Collect();
+                var automaticTimer = Stopwatch.StartNew();
+                automatic.SpliceAutomatically();
+                automaticTimer.Stop();
+                autos[i] = automaticTimer.ElapsedMilliseconds;
+               
+                manual.AssertNotDefault();
+                automatic.AssertNotDefault();
+            }
             
-            var automaticTimer = Stopwatch.StartNew();
-            var automatic = new IntArrayPerformanceTestCase();
-            automatic.SpliceAutomatically();
-            automaticTimer.Stop();
-            var automaticMilliseconds = automaticTimer.ElapsedMilliseconds;
-
-            manual.AssertNotDefault();
-            automatic.AssertNotDefault();
-
-            Assert.IsTrue(Math.Abs(automaticMilliseconds - manualMilliseconds) < AllowableOverhead, "The difference {0}ms was greater than expected {1}ms.", Math.Abs(automaticMilliseconds - manualMilliseconds), AllowableOverhead);
+            var autoAvg = autos.Average();
+            var manualAvg = manuals.Average();
+            var diff = Math.Abs(autoAvg - manualAvg);
+            Console.WriteLine("IntArray Performace: automatic={0:0.00}ms, manual={1:0.00}ms, difference={2:0.00}ms", autoAvg, manualAvg, diff);
+            Assert.IsTrue(diff < AllowableOverhead, "The avderage difference {0}ms was greater than expected {1}ms.", diff, AllowableOverhead);
         }
 
         [Test]
         public void StringArrayPerformanceTest()
         {
-            var manualTimer = Stopwatch.StartNew();
-            var manual = new StringArrayPerformanceTestCase();
-            manual.SpliceManually();
-            manualTimer.Stop();
-            var manualMilliseconds = manualTimer.ElapsedMilliseconds;
+            var manuals = new long[AttemptCount];
+            var autos = new long[AttemptCount];
+            for (var i = 0; i < AttemptCount; i++) 
+            {
+                var manual = new StringArrayPerformanceTestCase();
+                GC.Collect();
+                var manualTimer = Stopwatch.StartNew();
+                manual.SpliceManually();
+                manualTimer.Stop();
+                manuals[i] = manualTimer.ElapsedMilliseconds;
+                
+                var automatic = new StringArrayPerformanceTestCase();
+                GC.Collect();
+                var automaticTimer = Stopwatch.StartNew();
+                automatic.SpliceAutomatically();
+                automaticTimer.Stop();
+                autos[i] = automaticTimer.ElapsedMilliseconds;
+               
+                manual.AssertNotDefault();
+                automatic.AssertNotDefault();
+            }
             
-            var automaticTimer = Stopwatch.StartNew();
-            var automatic = new StringArrayPerformanceTestCase();
-            automatic.SpliceAutomatically();
-            automaticTimer.Stop();
-            var automaticMilliseconds = automaticTimer.ElapsedMilliseconds;
-
-            manual.AssertNotDefault();
-            automatic.AssertNotDefault();
-
-            Assert.IsTrue(Math.Abs(automaticMilliseconds - manualMilliseconds) < AllowableOverhead, "The difference {0}ms was greater than expected {1}ms.", Math.Abs(automaticMilliseconds - manualMilliseconds), AllowableOverhead);
+            var autoAvg = autos.Average();
+            var manualAvg = manuals.Average();
+            var diff = Math.Abs(autoAvg - manualAvg);
+            Console.WriteLine("StringArray Performace: automatic={0:0.00}ms, manual={1:0.00}ms, difference={2:0.00}ms", autoAvg, manualAvg, diff);
+            Assert.IsTrue(diff < AllowableOverhead, "The avderage difference {0}ms was greater than expected {1}ms.", diff, AllowableOverhead);
         }
 
     }

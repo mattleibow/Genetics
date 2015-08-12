@@ -15,6 +15,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Xml;
 using Android.App;
 using Android.Content.Res;
@@ -34,7 +35,8 @@ namespace GeneticsTests
     [TestFixture]
     public class SplicePerformanceTests : TestBase
     { 
-        private const int AllowableOverhead = 250;
+        private const int AllowableOverhead = 100;
+        private const int AttemptCount = 25;
 
         [SetUp]
         public override void Setup()
@@ -121,22 +123,33 @@ namespace GeneticsTests
         [Test]
         public void <#= resourceType.Type #>PerformanceTest()
         {
-            var manualTimer = Stopwatch.StartNew();
-            var manual = new <#= resourceType.Type #>PerformanceTestCase();
-            manual.SpliceManually();
-            manualTimer.Stop();
-            var manualMilliseconds = manualTimer.ElapsedMilliseconds;
+            var manuals = new long[AttemptCount];
+            var autos = new long[AttemptCount];
+            for (var i = 0; i < AttemptCount; i++) 
+            {
+                var manual = new <#= resourceType.Type #>PerformanceTestCase();
+                GC.Collect();
+                var manualTimer = Stopwatch.StartNew();
+                manual.SpliceManually();
+                manualTimer.Stop();
+                manuals[i] = manualTimer.ElapsedMilliseconds;
+                
+                var automatic = new <#= resourceType.Type #>PerformanceTestCase();
+                GC.Collect();
+                var automaticTimer = Stopwatch.StartNew();
+                automatic.SpliceAutomatically();
+                automaticTimer.Stop();
+                autos[i] = automaticTimer.ElapsedMilliseconds;
+               
+                manual.AssertNotDefault();
+                automatic.AssertNotDefault();
+            }
             
-            var automaticTimer = Stopwatch.StartNew();
-            var automatic = new <#= resourceType.Type #>PerformanceTestCase();
-            automatic.SpliceAutomatically();
-            automaticTimer.Stop();
-            var automaticMilliseconds = automaticTimer.ElapsedMilliseconds;
-
-            manual.AssertNotDefault();
-            automatic.AssertNotDefault();
-
-            Assert.IsTrue(Math.Abs(automaticMilliseconds - manualMilliseconds) < AllowableOverhead, "The difference {0}ms was greater than expected {1}ms.", Math.Abs(automaticMilliseconds - manualMilliseconds), AllowableOverhead);
+            var autoAvg = autos.Average();
+            var manualAvg = manuals.Average();
+            var diff = Math.Abs(autoAvg - manualAvg);
+            Console.WriteLine("<#= resourceType.Type #> Performace: automatic={0:0.00}ms, manual={1:0.00}ms, difference={2:0.00}ms", autoAvg, manualAvg, diff);
+            Assert.IsTrue(diff < AllowableOverhead, "The avderage difference {0}ms was greater than expected {1}ms.", diff, AllowableOverhead);
         }
 
 <# } #>
