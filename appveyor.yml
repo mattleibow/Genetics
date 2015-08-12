@@ -56,6 +56,10 @@ test_script:
         /p:Configuration=$env:configuration `
         /p:Platform=AnyCPU `
         /t:PackageForAndroid
+      If ($LastExitCode -ne 0)
+      {
+        exit $LastExitCode;
+      }
       
       Write-Host "Uploading to Xamarin Test Cloud...";
       .\packages\Xamarin.UITest.1.0.0\tools\test-cloud.exe `
@@ -67,19 +71,21 @@ test_script:
         --user $env:XamarinEmail `
         --assembly-dir GeneticsUITests\bin\$env:configuration `
         --nunit-xml GeneticsUITests.Results.xml
-      $testResult = $LastExitCode;
-      
-      Write-Host "Uploading the test results...";
-      If ($testResult -ne 0 -and $testResult -ne 19)
+      If ($LastExitCode -ne 0 -and $LastExitCode -ne 19)
       {
         exit $LastExitCode;
       }
+      
+      Write-Host "Uploading the test results...";
       $path = (Resolve-Path .\GeneticsUITests.Results.xml); 
       $wc = (New-Object 'System.Net.WebClient'); 
-      $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", $path); 
-      Write-Host "Done.";
+      $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", $path);
       
-      exit $testResult;
+      Write-Host "Done.";
+      If ($LastExitCode -ne 0)
+      {
+        exit $LastExitCode;
+      }
   
 # artifacts
 artifacts: 
