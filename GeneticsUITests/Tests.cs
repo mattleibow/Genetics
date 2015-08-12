@@ -35,7 +35,7 @@ namespace GeneticsUITests
 			app.Tap (e => e.Id ("RunTestsButton"));
 
 			// wait for results
-			app.WaitForElement (e => e.Id ("ResultsResult"));
+			app.WaitForElement (e => e.Id ("ResultsResult"), timeout: TimeSpan.FromMinutes(5)); // to run all the tests
 			var resultsText = app.Query (e => e.Id ("ResultsResult")).FirstOrDefault ();
 			Assert.IsNotNull (resultsText);
 			app.WaitFor (() => !string.IsNullOrEmpty (resultsText.Text));
