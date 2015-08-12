@@ -32,17 +32,17 @@ build:
   verbosity: normal
 after_build:
   - ps: >-
-      $nugetVersion = $env:version;
+      $nugetVersion = $env:APPVEYOR_BUILD_VERSION;
       
       Write-Host "Setting .nuspec version tag to $nugetVersion...";
       $content = (Get-Content Genetics.nuspec);
-      $content = $content -replace '\$version\$', $nugetVersion;
+      $content = $content -replace "\$version\$", $nugetVersion;
       $content | Out-File Genetics.nuspec;
       nuget pack Genetics.nuspec;
 
       Write-Host "Setting component.yaml version tag to $nugetVersion...";
       $content = (Get-Content component.yaml);
-      $content = $content -replace '\$version\$', $nugetVersion;
+      $content = $content -replace "\$version\$", $nugetVersion;
       $content | Out-File component.yaml;
       ./Tools/xamarin-component.exe package ./;
       
