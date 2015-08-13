@@ -9,7 +9,7 @@ version: $version$
 src-url: https://github.com/mattleibow/Genetics
 
 # there's a bug in the latest release of xamarin-component on Windows
-skip_docs: true
+skip_docs: "true"
 
 details: Details.md
 license: License.md
