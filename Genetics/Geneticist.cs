@@ -12,6 +12,88 @@ using Genetics.EventGenes;
 
 namespace Genetics
 {
+    /// <summary>
+    /// This type is used to inject views and resources into members using attributes.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Views and resource values can be injected into both fields and properties using 
+    /// the <see cref="Attributes.SpliceAttribute">[Splice]</see> attribute. Event handlers can be attached 
+    /// using the various <see cref="Attributes.SpliceEventAttribute">[SpliceEvent]</see> attributes.
+    /// </para>
+    /// <para>
+    /// Finding views from your activity is as easy as:
+    /// <code>
+    /// public class ExampleActivity : Activity
+    /// {
+    ///   [Splice(Resource.Id.title)]
+    ///   private EditText titleView;
+    ///   [Splice(Resource.Id.subtitle)]
+    ///   private EditText subtitleView;
+    ///
+    ///   protected override void OnCreate(Bundle savedInstanceState)
+    ///   {
+    ///     base.OnCreate(savedInstanceState);
+    ///     SetContentView(Resource.Layout.ExampleLayout);
+    ///     
+    ///     Geneticist.Splice(this);
+    ///   }
+    /// }
+    /// </code>
+    /// </para>
+    /// <para>
+    /// View and resource injection can be performed directly on an <see cref="Splice(Activity)">Activity</see>,
+    /// a <see cref="Splice(View)">View</see> or a <see cref="Splice(Dialog)">Dialog</see>. 
+    /// Alternate objects with view members can be specified along with an 
+    /// <see cref="Splice(object, Activity)">Activity</see>,
+    /// <see cref="Splice(object, View)">View</see> or
+    /// <see cref="Splice(object, Dialog)">Dialog</see>.
+    /// </para>
+    /// <para>
+    /// In the case where the object only contains resource members, and no UI component, such as in the case
+    /// of a <see cref="Android.Widget.IListAdapter" />, the <see cref="Context" /> 
+    /// can be specified along with a <see langword="null" /> source object:
+    /// <code>
+    /// Geneticist.Splice(this, null, context);
+    /// </code>
+    /// </para>
+    /// <para>
+    /// Resource values can also be injected to fields or properties:
+    /// <code>
+    /// [Splice(Resource.Boolean.isTablet)]
+    /// private bool isTablet;
+    /// 
+    /// [Splice(Resource.Integer.columns)]
+    /// public int Columns { get; set; }
+    /// 
+    /// [Splice(Resource.Xml.manifest)]
+    /// public XDocument Manifest { get; private set; }
+    /// </code>
+    /// </para>
+    /// <para>
+    /// To inject event handlers, you can attribute your methods. As long as the method parameters are compatible, 
+    /// they will be automatically hooked up:
+    /// <code>
+    /// [SpliceClick(Resource.Id.submit)]
+    /// private void OnSubmit(object sender, EventArgs e)
+    /// {
+    ///   // React to button click.
+    /// }
+    /// </code>
+    /// </para>
+    /// <para>
+    /// Be default, views and resource are required to be present for member bindings.
+    /// If a view is optional set the <see cref="Attributes.SpliceAttribute.Optional">Optional</see> 
+    /// property to <c>true</c>:
+    /// <code>
+    /// [Splice(Resource.Id.title, Optional = true)]
+    /// private EditText titleView;
+    /// 
+    /// [Splice(Resource.Xml.manifest, Optional = true)]
+    /// public XDocument Manifest { get; private set; }
+    /// </code>
+    /// </para>
+    /// </remarks>
     public static class Geneticist
     {
         private readonly static Dictionary<string, Dictionary<Type, IGene>> genes;
@@ -30,8 +112,9 @@ namespace Genetics
             genes = new Dictionary<string, Dictionary<Type, IGene>>();
             eventGenes = new Dictionary<Type, IEventGene>();
             ThrowOnError = true;
-            Debug = false;
-            DebugTextWriter = null;
+            debug = false;
+            debugTextWriter = Console.Out;
+            willWriteToDebug = false;
 
             RegisterDefaultGenes();
             RegisterDefaultEventGenes();
@@ -47,6 +130,11 @@ namespace Genetics
             get { return typeMappings.Values.ToArray(); }
         }
 
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to write to the <see cref="DebugTextWriter" />.
+        /// </summary>
+        /// <value><c>true</c> if it should debug; otherwise, <c>false</c>.</value>
         public static bool Debug
         {
             get { return debug; }
@@ -67,22 +155,41 @@ namespace Genetics
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether errors should raise exceptions.
+        /// </summary>
+        /// <value><c>true</c> if errors should raise exceptions; otherwise, <c>false</c>.</value>
         public static bool ThrowOnError
         {
             get { return throwOnError; }
             set { throwOnError = value; }
         }
 
+        /// <summary>
+        /// Splice attributed members in the specified <see cref="Activity"/>. 
+        /// The current content view is used as the view root.
+        /// </summary>
+        /// <param name="target">The target activity for member injection.</param>
         public static void Splice(Activity target)
         {
             Splice(target, target);
         }
 
+        /// <summary>
+        /// Splice attributed members in the specified <see cref="View"/>. 
+        /// The specified view is used as the view root.
+        /// </summary>
+        /// <param name="target">The target view for member injection.</param>
         public static void Splice(View target)
         {
             Splice(target, target);
         }
 
+        /// <summary>
+        /// Splice attributed members in the specified <see cref="Dialog"/>. 
+        /// The current content view is used as the view root.
+        /// </summary>
+        /// <param name="target">The target dialog for member injection.</param>
         public static void Splice(Dialog target)
         {
             Splice(target, target);
