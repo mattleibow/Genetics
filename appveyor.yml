@@ -20,6 +20,10 @@ assembly_info:
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}-{branch}'
 
+# packages
+install:
+  - cinst xamarin-component -version 0.99.0.187
+
 # build
 branches:
   only:
@@ -44,7 +48,7 @@ after_build:
       $content = (Get-Content component.yaml);
       $content = $content -replace '\$version\$', $nugetVersion;
       $content | Out-File component.yaml;
-      ./Tools/xamarin-component.exe package ./;
+      xamarin-component package ./;
       
 on_finish:
   - appveyor UnregisterXamarinLicense -Email %XamarinEmail% -Password %XamarinPassword%
