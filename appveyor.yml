@@ -35,37 +35,36 @@ build:
   project: Genetics.sln 
   verbosity: normal
 after_build:
-  - ps: >
-      $nugetVersion = "$env:APPVEYOR_BUILD_VERSION";
+  - ps: |
+      $nugetVersion = "$env:APPVEYOR_BUILD_VERSION"
       
-      Write-Host "Setting .nuspec version tag to $nugetVersion...";
-      $content = (Get-Content Genetics.nuspec);
-      $content = $content -replace '\$version\$', $nugetVersion;
-      $content | Out-File Genetics.nuspec;
-      nuget pack Genetics.nuspec;
+      Write-Host "Setting .nuspec version tag to $nugetVersion..."
+      $content = (Get-Content Genetics.nuspec)
+      $content = $content -replace '\$version\$', $nugetVersion
+      $content | Out-File Genetics.nuspec
+      nuget pack Genetics.nuspec
 
-      Write-Host "Setting component.yaml version tag to $nugetVersion...";
-      $content = (Get-Content component.yaml);
-      $content = $content -replace '\$version\$', $nugetVersion;
-      $content | Out-File component.yaml;
-      xamarin-component package ./;
+      Write-Host "Setting component.yaml version tag to $nugetVersion..."
+      $content = (Get-Content component.yaml)
+      $content = $content -replace '\$version\$', $nugetVersion
+      $content | Out-File component.yaml
+      xamarin-component package ./
       
 on_finish:
   - appveyor UnregisterXamarinLicense -Email %XamarinEmail% -Password %XamarinPassword%
 
 test_script:
-  - ps: >
-      Write-Host "Building the test APK...";
+  - ps: |
+      Write-Host "Building the test APK..."
       msbuild GeneticsTests\GeneticsTests.csproj `
         /p:Configuration=$env:configuration `
         /p:Platform=AnyCPU `
         /t:PackageForAndroid
-      If ($LastExitCode -ne 0)
-      {
-        exit $LastExitCode;
+      If ($LastExitCode -ne 0) {
+        exit $LastExitCode
       }
       
-      Write-Host "Uploading to Xamarin Test Cloud...";
+      Write-Host "Uploading to Xamarin Test Cloud..."
       .\packages\Xamarin.UITest.1.0.0\tools\test-cloud.exe `
         submit GeneticsTests\bin\$env:configuration\com.example.genetics.GeneticsTests.apk `
         $env:XamarinTestCloudApiKey `
@@ -75,20 +74,18 @@ test_script:
         --user $env:XamarinEmail `
         --assembly-dir GeneticsUITests\bin\$env:configuration `
         --nunit-xml GeneticsUITests.Results.xml
-      If ($LastExitCode -ne 0 -and $LastExitCode -ne 19)
-      {
-        exit $LastExitCode;
+      If ($LastExitCode -ne 0 -and $LastExitCode -ne 19) {
+        exit $LastExitCode
       }
       
-      Write-Host "Uploading the test results...";
-      $path = (Resolve-Path .\GeneticsUITests.Results.xml); 
-      $wc = (New-Object 'System.Net.WebClient'); 
-      $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", $path);
+      Write-Host "Uploading the test results..."
+      $path = (Resolve-Path .\GeneticsUITests.Results.xml)
+      $wc = (New-Object 'System.Net.WebClient')
+      $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", $path)
       
-      Write-Host "Done.";
-      If ($LastExitCode -ne 0)
-      {
-        exit $LastExitCode;
+      Write-Host "Done."
+      If ($LastExitCode -ne 0) {
+        exit $LastExitCode
       }
   
 # artifacts
