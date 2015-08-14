@@ -22,7 +22,7 @@ assembly_info:
 
 # packages
 install:
-  - cinst xamarin-component -version 0.99.0.187
+  - cinst xamarin-component -version 0.99.0.194
 
 # build
 branches:

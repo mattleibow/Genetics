@@ -8,9 +8,6 @@ summary: An attribute-based injection of Android resources, views and event hand
 version: $version$
 src-url: https://github.com/mattleibow/Genetics
 
-# there's a bug in the latest release of xamarin-component on Windows
-skip_docs: "true"
-
 details: Details.md
 license: License.md
 getting-started: GettingStarted.md
