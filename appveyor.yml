@@ -35,7 +35,7 @@ build:
   project: Genetics.sln 
   verbosity: normal
 after_build:
-  - ps: >-
+  - ps: >
       $nugetVersion = "$env:APPVEYOR_BUILD_VERSION";
       
       Write-Host "Setting .nuspec version tag to $nugetVersion...";
@@ -54,7 +54,7 @@ on_finish:
   - appveyor UnregisterXamarinLicense -Email %XamarinEmail% -Password %XamarinPassword%
 
 test_script:
-  - ps: >-
+  - ps: >
       Write-Host "Building the test APK...";
       msbuild GeneticsTests\GeneticsTests.csproj `
         /p:Configuration=$env:configuration `
