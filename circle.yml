@@ -3,7 +3,8 @@ machine:
   xcode: 
     version: "6.3.1" 
   environment: 
-    XCODE_SCHEME: XamarinScheme
+    XCODE_SCHEME: XamarinScheme 
+    XCODE_WORKSPACE: XamarinWorkspace
 
 # packages
 dependencies:
