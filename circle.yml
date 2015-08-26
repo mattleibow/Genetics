@@ -15,10 +15,13 @@ dependencies:
       echo "local apps" && 
       ls -la ~/Applications && 
       echo "root apps" && 
-      ls -la /Applications
+      ls -la /Applications &&
+      xbuild /version
  
 test: 
   override: 
-    - echo "Building..."
+    - echo "Building Genetics..." &&
+      xbuild /p:Configuration=Release Genetics.sln /verbosity:normal
+      
     - echo "Testing..."
     - echo "Packaging..." 
