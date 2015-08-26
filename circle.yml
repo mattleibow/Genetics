@@ -9,17 +9,18 @@ machine:
 # packages
 dependencies:
   override: 
-    - echo "install brew cask"
-    - brew install caskroom/cask/brew-cask
-    
-    - echo "install xamarin components"
-    - brew cask install xamarin xamarin-jdk xamarin-ios xamarin-studio
-    
-    - echo "local apps"
-    - ls -la ~/Applications
-    
-    - echo "root apps"
-    - ls -la /Applications
+    ->
+      echo "install brew cask"
+      brew install caskroom/cask/brew-cask
+      
+      echo "install xamarin components"
+      brew cask install xamarin xamarin-jdk xamarin-ios xamarin-studio
+      
+      echo "local apps"
+      ls -la ~/Applications
+      
+      echo "root apps"
+      ls -la /Applications
  
 test: 
   override: 
