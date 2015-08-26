@@ -1,0 +1,25 @@
+# machine configuration
+machine: 
+  xcode: 
+    version: "6.3.1" 
+
+# packages
+dependencies:
+  override: 
+    - echo "install brew cask"
+    - brew install caskroom/cask/brew-cask
+    
+    - echo "install xamarin components"
+    - brew cask install xamarin xamarin-jdk xamarin-ios xamarin-studio
+    
+    - echo "local apps"
+    - ls -la ~/Applications
+    
+    - echo "root apps"
+    - ls -la /Applications
+ 
+test: 
+  override: 
+    - echo "Building..."
+    - echo "Testing..."
+    - echo "Packaging..." 
