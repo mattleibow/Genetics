@@ -11,7 +11,7 @@ dependencies:
   override: 
     - echo "installing the xamarin tools" && 
       brew install caskroom/cask/brew-cask && 
-      brew cask install xamarin xamarin-jdk xamarin-ios xamarin-studio && 
+      brew cask install xamarin xamarin-jdk xamarin-android xamarin-ios xamarin-studio && 
       echo "local apps" && 
       ls -la ~/Applications && 
       echo "root apps" && 
