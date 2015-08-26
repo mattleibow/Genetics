@@ -5,13 +5,14 @@ machine:
   environment: 
     XCODE_SCHEME: XamarinScheme 
     XCODE_WORKSPACE: XamarinWorkspace
+    xbuild: XamarinWorkspace
 
 # packages
 dependencies:
   override: 
     - echo "installing the xamarin tools" && 
       brew install caskroom/cask/brew-cask && 
-      brew cask install xamarin xamarin-jdk xamarin-android xamarin-ios xamarin-studio && 
+      brew cask install xamarin-mdk && 
       echo "local apps" && 
       ls -la ~/Applications && 
       echo "root apps" && 
