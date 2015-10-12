@@ -48,4 +48,14 @@ namespace GeneticsTests.TestCases
             throw new NotImplementedException("InvalidEvent");
         }
     }
+
+    public class MultipleEventSpliceTargetObject
+    {
+        [SpliceClick(Resource.Id.simpleButton)]
+        [SpliceClick(Resource.Id.simpleCheckBox)]
+        public void MultipleMethod(object sender, EventArgs e)
+        {
+            throw new NotImplementedException(sender.GetType().Name);
+        }
+    }
 }
