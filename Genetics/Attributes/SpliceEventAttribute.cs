@@ -31,7 +31,7 @@ namespace Genetics.Attributes
         public bool Optional { get; set; }
     }
 
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SpliceClickAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
@@ -52,7 +52,7 @@ namespace Genetics.Attributes
         }
     }
 
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SpliceLongClickAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
@@ -73,7 +73,7 @@ namespace Genetics.Attributes
         }
     }
 
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SpliceItemClickAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
@@ -94,7 +94,7 @@ namespace Genetics.Attributes
         }
     }
 
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SpliceCheckedChangeAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
@@ -115,7 +115,7 @@ namespace Genetics.Attributes
         }
     }
 
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SpliceItemLongClickAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
@@ -136,7 +136,7 @@ namespace Genetics.Attributes
         }
     }
 
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SpliceItemSelectedAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
@@ -157,7 +157,7 @@ namespace Genetics.Attributes
         }
     }
 
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SpliceTextChangedAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
@@ -178,7 +178,7 @@ namespace Genetics.Attributes
         }
     }
 
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SpliceTouchAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
@@ -199,7 +199,7 @@ namespace Genetics.Attributes
         }
     }
 
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SpliceFocusChangeAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649
@@ -220,7 +220,7 @@ namespace Genetics.Attributes
         }
     }
 
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SpliceEditorActionAttribute : SpliceEventAttribute
     {
 #pragma warning disable 0219, 0649

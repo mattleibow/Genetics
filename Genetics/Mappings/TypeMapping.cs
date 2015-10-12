@@ -12,7 +12,7 @@ namespace Genetics.Mappings
         {
             Type = type;
             Members = new Dictionary<MemberInfo, MemberMapping>();
-            Methods = new Dictionary<MethodInfo, MethodMapping>();
+            Methods = new Dictionary<MethodInfo, List<MethodMapping>>();
 
             MapMembers();
         }
@@ -21,7 +21,7 @@ namespace Genetics.Mappings
 
         public Dictionary<MemberInfo, MemberMapping> Members { get; private set; }
 
-        public Dictionary<MethodInfo, MethodMapping> Methods { get; private set; }
+        public Dictionary<MethodInfo, List<MethodMapping>> Methods { get; private set; }
 
         private void MapMembers()
         {
@@ -41,11 +41,15 @@ namespace Genetics.Mappings
             var targeMethods = Type.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
             foreach (var method in targeMethods)
             {
-                var attr = method.GetCustomAttribute<SpliceEventAttribute>(false);
-                if (attr != null)
+                var attrs = method.GetCustomAttributes<SpliceEventAttribute>(false);
+                foreach (var attr in attrs)
                 {
                     var mapping = new MethodMapping(Type, method, attr);
-                    Methods.Add(method, mapping);
+                    if (!Methods.ContainsKey(method))
+                    {
+                        Methods.Add(method, new List<MethodMapping>());
+                    }
+                    Methods[method].Add(mapping);
                 }
             }
         }
