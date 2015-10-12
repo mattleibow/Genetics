@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Android.App;
 using Android.Widget;
 using Android.OS;
-using Android.Support.V7.App;
 using Android.Views;
 using Android.Views.Animations;
 
@@ -12,8 +11,8 @@ using Genetics.Attributes;
 
 namespace GeneticsSample
 {
-    [Activity(Label = "GeneticsSample", MainLauncher = true, Icon = "@drawable/icon", Theme = "@style/Theme.AppCompat.NoActionBar")]
-    public class MainActivity : AppCompatActivity
+    [Activity(Label = "GeneticsSample", MainLauncher = true, Icon = "@drawable/icon", Theme = "@android:style/Theme.DeviceDefault.NoActionBar")]
+    public class MainActivity : Activity
     {
 		// view splice fields
 		[Splice(Resource.Id.title)] private TextView title;

@@ -17,17 +17,11 @@ namespace GeneticsTests
 		{
             var typeMapping = Geneticist.GetTypeMapping(typeof(ExactEventSpliceTargetObject));
             Assert.AreEqual(1, typeMapping.Methods.Values.Count);
-            Assert.AreEqual("ExactParametersMethod", typeMapping.Methods.Values.Single().Single().Method.Name);
+            Assert.AreEqual("ExactParametersMethod", typeMapping.Methods.Values.Single().Method.Name);
 
             typeMapping = Geneticist.GetTypeMapping(typeof(SimilarEventSpliceTargetObject));
             Assert.AreEqual(1, typeMapping.Methods.Values.Count);
-            Assert.AreEqual("SimilarParametersMethod", typeMapping.Methods.Values.Single().Single().Method.Name);
-
-            typeMapping = Geneticist.GetTypeMapping(typeof(MultipleEventSpliceTargetObject));
-            Assert.AreEqual(1, typeMapping.Methods.Values.Count);
-            Assert.AreEqual(2, typeMapping.Methods.Values.Single().Count);
-            Assert.AreEqual("MultipleMethod", typeMapping.Methods.Values.Single()[0].Method.Name);
-            Assert.AreEqual("MultipleMethod", typeMapping.Methods.Values.Single()[1].Method.Name);
+            Assert.AreEqual("SimilarParametersMethod", typeMapping.Methods.Values.Single().Method.Name);
         }
 
         [Test]
@@ -114,29 +108,6 @@ namespace GeneticsTests
             var view = inflater.Inflate(layout, parent, false);
 
             return view;
-        }
-
-        [Test]
-        public void MultipleMembersAreBound()
-        {
-            var view = CreateView(Resource.Layout.SimpleLayout);
-
-            var target = new MultipleEventSpliceTargetObject();
-            Geneticist.Splice(target, view, Application.Context);
-            var button = view.FindViewById(Resource.Id.simpleButton);
-            var checkbox = view.FindViewById(Resource.Id.simpleCheckBox);
-
-            var ex = Assert.Throws<NotImplementedException>(() =>
-            {
-                button.CallOnClick();
-            });
-            Assert.AreEqual("Button", ex.Message);
-
-            ex = Assert.Throws<NotImplementedException>(() =>
-            {
-                checkbox.CallOnClick();
-            });
-            Assert.AreEqual("CheckBox", ex.Message);
         }
     }
 }

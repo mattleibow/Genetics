@@ -243,7 +243,7 @@ namespace Genetics
                 {
                     context = getContext(source);
                 }
-                foreach (var methodMapping in typeMapping.Methods.Values.SelectMany(x => x))
+                foreach (var methodMapping in typeMapping.Methods.Values)
                 {
                     ProcessMethodMapping(target, source, context, methodMapping);
                 }
@@ -450,7 +450,7 @@ namespace Genetics
                 {
                     context = getContext(source);
                 }
-                foreach (var methodMapping in typeMapping.Methods.Values.SelectMany(x => x))
+                foreach (var methodMapping in typeMapping.Methods.Values)
                 {
                     SeverMethodMapping(target, source, context, methodMapping);
                 }
