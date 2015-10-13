@@ -3,7 +3,7 @@ os: Visual Studio 2015
 configuration: Release
 platform: Any CPU
 environment:
-  LibraryVersion: 1.0.0
+  LibraryVersion: 1.1.0
   XamarinEmail:
     secure: +SUXZSPLHwp39+Yh09d2xxVGsEgHtlSD4NT1Og5h3sg=
   XamarinPassword:
