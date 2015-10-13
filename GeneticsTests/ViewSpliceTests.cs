@@ -20,6 +20,9 @@ namespace GeneticsTests
 			mapping = Geneticist.GetTypeMapping(typeof(InvalidViewTypeTargetObject));
 			Assert.AreEqual(1, mapping.Members.Values.Count);
 
+			mapping = Geneticist.GetTypeMapping(typeof(ViewNotFoundTargetObject));
+			Assert.AreEqual(2, mapping.Members.Values.Count);
+
             //mapping = Geneticist.GetTypeMapping(typeof(JavaCastViewsTargetObject));
             //Assert.AreEqual(4, mapping.Members.Values.Count);
         }
@@ -39,6 +42,18 @@ namespace GeneticsTests
 
             Assert.AreSame(target.ButtonProperty, target.ButtonAsViewProperty);
             Assert.AreSame(target.ButtonProperty, target.ButtonAsTextViewProperty);
+        }
+
+        [Test]
+        public void ViewNotFoundIsHandledCorrectly()
+        {
+            var view = CreateView(Resource.Layout.SimpleLayout);
+
+            var target = new ViewNotFoundTargetObject();
+            Geneticist.Splice(target, view, Application.Context);
+
+            Assert.IsNotNull(target.ButtonProperty);
+            Assert.IsNull(target.MissingViewProperty);
         }
 
         [Test]

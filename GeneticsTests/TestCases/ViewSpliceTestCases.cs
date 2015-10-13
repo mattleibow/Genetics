@@ -28,6 +28,15 @@ namespace GeneticsTests.TestCases
         public EditText EditTextProperty { get; set; }
     }
 
+    public class ViewNotFoundTargetObject
+    {
+        [Splice(Resource.Id.simpleButton)]
+        public Button ButtonProperty { get; set; }
+
+        [Splice(Resource.Id.javaCastNativeToolbar)]
+        public View MissingViewProperty { get; set; }
+    }
+
     //public class JavaCastViewsTargetObject
     //{
     //    [Splice(Resource.Id.javaCastNativeToolbar)]

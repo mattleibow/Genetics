@@ -48,9 +48,12 @@ namespace Genetics.Genes
             }
             else
             {
-                Geneticist.HandleError(
-                    "Unknown view container type '{0}'.",
-                    source.GetType().FullName);
+                // views are different, they can be missing in layouts
+                assigned = true;
+                Geneticist.HandleMessage(
+                    "No view found with id '{0}' for member '{1}'.",
+                    context.Resources.GetResourceName(resourceId),
+                    memberMapping.Member.Name);
             }
             return assigned;
         }
