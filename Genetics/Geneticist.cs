@@ -237,6 +237,15 @@ namespace Genetics
                 }
             }
 
+            if (source == null)
+            {
+                if (willWriteToDebug)
+                {
+                    HandleMessage("Skipping splice of methods because source is null.");
+                }
+            }
+            else
+            {
             if (typeMapping != null && typeMapping.Methods.Count > 0)
             {
                 if (context == null)
@@ -247,6 +256,7 @@ namespace Genetics
                 {
                     ProcessMethodMapping(target, source, context, methodMapping);
                 }
+            }
             }
         }
 
@@ -377,12 +387,27 @@ namespace Genetics
             }
             else
             {
-                if (willWriteToDebug || throwOnError)
+                if (methodMapping.Attribute.Optional)
                 {
-                    HandleError(
-                        "No view found with id '{0}' for method '{1}'.",
-                        context.Resources.GetResourceName(attr.ViewId),
-                        methodMapping.Method.Name);
+                    if (willWriteToDebug)
+                    {
+                        HandleMessage(
+                            "Skipping splice of handler for event '{0}' with id '{1}' for method '{2}'.",
+                            attr.EventName,
+                            context.Resources.GetResourceName(attr.ViewId),
+                            methodMapping.Method.Name);
+                    }
+                }
+                else
+                {
+                    if (willWriteToDebug || throwOnError)
+                    {
+                        HandleError(
+                            "Unable to splice handler for event '{0}' with id '{1}' for method '{2}'.",
+                            attr.EventName,
+                            context.Resources.GetResourceName(attr.ViewId),
+                            methodMapping.Method.Name);
+                    }
                 }
             }
         }
@@ -444,6 +469,15 @@ namespace Genetics
                 }
             }
 
+            if (source == null)
+            {
+                if (willWriteToDebug)
+                {
+                    HandleMessage("Skipping sever of methods because source is null.");
+                }
+            }
+            else
+            {
             if (typeMapping != null && typeMapping.Methods.Count > 0)
             {
                 if (context == null)
@@ -454,6 +488,7 @@ namespace Genetics
                 {
                     SeverMethodMapping(target, source, context, methodMapping);
                 }
+            }
             }
         }
 
@@ -523,12 +558,28 @@ namespace Genetics
             }
             else
             {
-                if (willWriteToDebug)
+
+                if (methodMapping.Attribute.Optional)
                 {
-                    HandleMessage(
-                        "No view found with id '{0}' for method '{1}'.",
-                        context.Resources.GetResourceName(attr.ViewId),
-                        methodMapping.Method.Name);
+                    if (willWriteToDebug)
+                    {
+                        HandleMessage(
+                            "Skipping splice for event '{0}' on view with id '{1}' for method '{2}'.",
+                            attr.EventName,
+                            context.Resources.GetResourceName(attr.ViewId),
+                            methodMapping.Method.Name);
+                    }
+                }
+                else
+                {
+                    if (willWriteToDebug || throwOnError)
+                    {
+                        HandleError(
+                            "Unable to splice event '{0}' on view with id '{1}' for method '{2}'.",
+                            attr.EventName,
+                            context.Resources.GetResourceName(attr.ViewId),
+                            methodMapping.Method.Name);
+                    }
                 }
             }
         }

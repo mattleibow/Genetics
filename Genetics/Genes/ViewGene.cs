@@ -48,12 +48,21 @@ namespace Genetics.Genes
             }
             else
             {
-                // views are different, they can be missing in layouts
-                assigned = true;
-                Geneticist.HandleMessage(
-                    "No view found with id '{0}' for member '{1}'.",
-                    context.Resources.GetResourceName(resourceId),
-                    memberMapping.Member.Name);
+                if (memberMapping.Attribute.Optional)
+                {
+                    assigned = true;
+                    Geneticist.HandleMessage(
+                            "Skipping splice of view with id '{0}' for member '{1}'.",
+                            context.Resources.GetResourceName(resourceId),
+                            memberMapping.Member.Name);
+                }
+                else
+                {
+                    Geneticist.HandleError(
+                        "Unable to splice view with id '{0}' for member '{1}'.",
+                        context.Resources.GetResourceName(resourceId),
+                        memberMapping.Member.Name);
+                }
             }
             return assigned;
         }

@@ -58,4 +58,22 @@ namespace GeneticsTests.TestCases
             throw new NotImplementedException(sender.GetType().Name);
         }
     }
+
+    public class EventNotFoundTargetObject
+    {
+        [SpliceClick(Resource.Id.javaCastNativeToolbar)]
+        public void MissingMethod(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("MissingMethod");
+        }
+    }
+
+    public class OptionalEventNotFoundTargetObject
+    {
+        [SpliceClick(Resource.Id.javaCastNativeToolbar, Optional = true)]
+        public void MissingMethod(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("MissingMethod");
+        }
+    }
 }

@@ -28,6 +28,10 @@ namespace GeneticsTests
             Assert.AreEqual(2, typeMapping.Methods.Values.Single().Count);
             Assert.AreEqual("MultipleMethod", typeMapping.Methods.Values.Single()[0].Method.Name);
             Assert.AreEqual("MultipleMethod", typeMapping.Methods.Values.Single()[1].Method.Name);
+
+            typeMapping = Geneticist.GetTypeMapping(typeof(EventNotFoundTargetObject));
+            Assert.AreEqual(1, typeMapping.Methods.Values.Count);
+            Assert.AreEqual("MissingMethod", typeMapping.Methods.Values.Single().Single().Method.Name);
         }
 
         [Test]
@@ -48,6 +52,29 @@ namespace GeneticsTests
         }
 
         [Test]
+        public void ViewNotFoundIsHandledCorrectly()
+        {
+            var view = CreateView(Resource.Layout.SimpleLayout);
+
+            var target = new EventNotFoundTargetObject();
+
+            Assert.Throws<SpliceException>(() =>
+            {
+                Geneticist.Splice(target, view, Application.Context);
+            });
+        }
+
+        [Test]
+        public void OptionalViewNotFoundIsHandledCorrectly()
+        {
+            var view = CreateView(Resource.Layout.SimpleLayout);
+
+            var target = new OptionalEventNotFoundTargetObject();
+
+            Geneticist.Splice(target, view, Application.Context);
+        }
+
+        [Test]
         public void ExactMatchMembersAreBound()
         {
             var view = CreateView(Resource.Layout.SimpleLayout);
@@ -61,6 +88,13 @@ namespace GeneticsTests
                 button.CallOnClick();
             });
             Assert.AreEqual("ExactParametersMethod", ex.Message);
+        }
+
+        [Test]
+        public void NullSourceDoesNotThrow()
+        {
+            var target = new ExactEventSpliceTargetObject();
+            Geneticist.Splice(target, null, Application.Context);
         }
 
         [Test]

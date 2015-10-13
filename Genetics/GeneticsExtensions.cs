@@ -162,6 +162,10 @@ namespace Genetics
                 return dialog.FindViewById(resourceId);
             }
 
+            Geneticist.HandleError(
+                "Unknown view container type '{0}'.",
+                source != null ? source.GetType().FullName : "<null>");
+
             return null;
         }
     }

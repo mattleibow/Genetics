@@ -37,6 +37,15 @@ namespace GeneticsTests.TestCases
         public View MissingViewProperty { get; set; }
     }
 
+    public class OptionalViewNotFoundTargetObject
+    {
+        [Splice(Resource.Id.simpleButton)]
+        public Button ButtonProperty { get; set; }
+
+        [Splice(Resource.Id.javaCastNativeToolbar, Optional = true)]
+        public View MissingViewProperty { get; set; }
+    }
+
     //public class JavaCastViewsTargetObject
     //{
     //    [Splice(Resource.Id.javaCastNativeToolbar)]

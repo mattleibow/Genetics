@@ -50,6 +50,18 @@ namespace GeneticsTests
             var view = CreateView(Resource.Layout.SimpleLayout);
 
             var target = new ViewNotFoundTargetObject();
+            Assert.Throws<SpliceException>(() =>
+            {
+                Geneticist.Splice(target, view, Application.Context);
+            });
+        }
+
+        [Test]
+        public void OptionalViewNotFoundIsHandledCorrectly()
+        {
+            var view = CreateView(Resource.Layout.SimpleLayout);
+
+            var target = new OptionalViewNotFoundTargetObject();
             Geneticist.Splice(target, view, Application.Context);
 
             Assert.IsNotNull(target.ButtonProperty);
